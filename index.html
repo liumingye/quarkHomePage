@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+	<title>主页</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css?v=1.48" />
+	<link rel="stylesheet" id="nightCss" type="text/css" href="css/night.css?v=1.48" disabled />
+</head>
+
+<body>
+	<div id="app">
+		<div class="page-home">
+			<div class="logo"></div>
+			<div class="ornament-input-group"></div>
+			<div class="bookmark"></div>
+		</div>
+		<div class="page-search">
+			<div class="history">
+				<div class="emptyHistory"></div>
+				<ul class="content"></ul>
+			</div>
+			<ul class="suggestion"></ul>
+			<div class="bottom-row">
+				<div class="search-from">
+					<div class="input-bg">
+						<input class="search-input" placeholder="搜索或输入网址" />
+						<div class="empty-input"></div>
+					</div>
+					<div class="search-btn">取消</div>
+				</div>
+				<div class="shortcut">
+					<div class="content">
+						<ul class="shortcut1">
+							<li>www.</li>
+							<li>m.</li>
+							<li>wap.</li>
+							<li>.org</li>
+						</ul>
+						<ul class="shortcut2">
+							<li>.</li>
+							<li>/</li>
+							<li>.cn</li>
+							<li>.com</li>
+							<li>.org</li>
+						</ul>
+						<ul class="shortcut3"></ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<input class="s-temp" />
+	</div>
+	<script src="js/lib/require.js?v=1.48"></script>
+	<script src="js/main.js?v=1.48"></script>
+	<!-- 不重要的CSS最后加载 -->
+	<link rel="stylesheet" type="text/css" href="css/lazy.css?v=1.48" />
+</body>
+
+</html>
