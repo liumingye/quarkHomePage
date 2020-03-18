@@ -164,9 +164,6 @@ body,html {
     color: #fff;
     text-shadow: 0 0 4px var(--dark);
 }
-.theme-white .logo svg path{
-    fill:var(--white);
-}
 /* 背景页面 */
 .addbook-shade,.page-search,.set-from{position:absolute;left:0;top:0;width:100%;height:100%;background:var(--bg);}
 .addbook-shade{background:rgba(0,0,0,0.5);}
@@ -375,6 +372,9 @@ body,html {
     height: 50px;
     width: 64px;
     float: left;
+}
+.set-back:hover{
+    background: rgba(0,0,0,0.1);
 }
 .set-back:after,.set-back:before{
     content: "";

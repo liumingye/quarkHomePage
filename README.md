@@ -1,4 +1,4 @@
-![](https://img.shields.io/badge/license-MIT-green)  ![](https://img.shields.io/badge/version-1.48-red)
+![](https://img.shields.io/badge/license-MIT-green)  ![](https://img.shields.io/badge/version-1.49-red)
 
 ## quarkHomePage
 H5仿夸克浏览器主页
@@ -12,3 +12,9 @@ H5仿夸克浏览器主页
 * Pure轻雨图标包
 # 在线地址
 [https://liumingye.gitee.io/quarkhomepage/](https://liumingye.gitee.io/quarkhomepage/)
+# 感谢开源项目
+* jquery
+* sortablejs
+* Swiper
+* TouchSwipe
+* requirejs

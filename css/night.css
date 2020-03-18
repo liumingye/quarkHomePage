@@ -95,3 +95,6 @@ body {
 .choice-cut .list{
 	filter: brightness(60%);
 }
+.logo{
+    filter: brightness(60%);
+}

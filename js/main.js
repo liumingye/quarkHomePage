@@ -1,5 +1,5 @@
 require.config({
-	urlArgs: "v=1.48",
+	urlArgs: "v=1.49",
 	baseUrl: "js/lib"
 });
 
@@ -33,7 +33,9 @@ require(['jquery'], function ($) {
 		 * @param {String} key 键值
 		 */
 		get: function (key) {
-			return JSON.parse(localStorage.getItem(key));
+			if (this.has(key)) {
+				return JSON.parse(localStorage.getItem(key));
+			}
 		},
 		has: function (key) {
 			if (localStorage.getItem(key)) {
@@ -57,42 +59,6 @@ require(['jquery'], function ($) {
 		/**
 		 * 初始化存储内容
 		 */
-		initBookMark: function () {
-			Storage.bookMark = [{
-				name: "精选",
-				url: "choice()",
-				icon: "icon/discover.png"
-			}, {
-				name: "微博",
-				url: "https://weibo.com",
-				icon: "icon/weibo.png"
-			}, {
-				name: "Bilibili",
-				url: "https://m.bilibili.com",
-				icon: "icon/bilibilibog.png"
-			}, {
-				name: "知乎",
-				url: "https://www.zhihu.com",
-				icon: "icon/zhihu.png"
-			}, {
-				name: "淘宝",
-				url: "https://m.taobao.com",
-				icon: "icon/taobao.png"
-			}, {
-				name: "贴吧",
-				url: "https://tieba.baidu.com",
-				icon: "icon/tieba.png"
-			}, {
-				name: "IT之家",
-				url: "https://m.ithome.com",
-				icon: "icon/ithome.png"
-			}, {
-				name: "网易",
-				url: "https://3g.163.com",
-				icon: "icon/netease.png"
-			}];
-			store.set("bookMark", Storage.bookMark);
-		},
 		initSetData: function () {
 			Storage.setData = { engines: "quark", bookcolor: "black", searchHistory: "1" };
 			store.set("setData", Storage.setData);
@@ -105,11 +71,6 @@ require(['jquery'], function ($) {
 				Storage.setData = store.get("setData");
 			} else {
 				this.initSetData();
-			}
-			if (store.has("bookMark")) {
-				Storage.bookMark = store.get("bookMark");
-			} else {
-				this.initBookMark();
 			}
 			// 加载LOGO
 			if (Storage.setData.logo) {
@@ -134,7 +95,7 @@ require(['jquery'], function ($) {
 					$("#nightCss").attr('disabled', true);
 				}
 			};
-			if (Storage.setData.nightMode === "1") {
+			if (Storage.setData.nightMode === true) {
 				nightMode.on();
 			} else {
 				nightMode.off();
@@ -150,7 +111,9 @@ require(['jquery'], function ($) {
 					}
 				}
 			});
-			$("#via_inject_css_night").html("");
+			if ($("#via_inject_css_night").html("").length > 0) {
+				nightMode.on();
+			}
 		}
 	};
 	loadStorage.applyItem();
@@ -196,32 +159,41 @@ require(['jquery'], function ($) {
 	}
 
 	/**
-	 * 首页书签模块
+	 * 首页书签构建函数
 	 * @function init 初始化
 	 * @function bind 绑定事件
 	 * @function del 删除书签
 	 * @function add 添加书签
 	 */
-	var bookMark = {
+	var bookMarkFn = function (ele, options) {
+		this.$ele = $(ele);
+		this.options = {
+			data: [{ "name": "精选", "url": "choice()", "icon": "icon/discover.png" }, { "name": "微博", "url": "https://weibo.com", "icon": "icon/weibo.png" }, { "name": "Bilibili", "url": "https://m.bilibili.com", "icon": "icon/bilibilibog.png" }, { "name": "知乎", "url": "https://www.zhihu.com", "icon": "icon/zhihu.png" }, { "name": "淘宝", "url": "https://m.taobao.com", "icon": "icon/taobao.png" }, { "name": "贴吧", "url": "https://tieba.baidu.com", "icon": "icon/tieba.png" }, { "name": "IT之家", "url": "https://m.ithome.com", "icon": "icon/ithome.png" }, { "name": "网易", "url": "https://3g.163.com", "icon": "icon/netease.png" }],
+		};
+		this.options = $.extend({}, this.options, options);
+		this.init();
+	}
+	bookMarkFn.prototype = {
 		init: function () {
-			var _ = this;
-			_.$bookmark = $('.bookmark');
 			var html = '';
-			for (var i = 0; i < Storage.bookMark.length; i++) {
-				html += '<div class="list" data-url="' + Storage.bookMark[i].url + '"><div class="img" style="background-image:url(' + Storage.bookMark[i].icon + ')"></div><div class="text">' + Storage.bookMark[i].name + "</div></div>";
+			var data = this.options.data;
+			for (var i = 0; i < data.length; i++) {
+				html += '<div class="list" data-url="' + data[i].url + '"><div class="img" style="background-image:url(' + data[i].icon + ')"></div><div class="text">' + data[i].name + "</div></div>";
 			}
-			_.$bookmark.html(html);
-			_.bind();
+			this.$ele.html(html);
+			this.$list = this.$ele.find(".list")
+			this.bind();
 		},
 		bind: function () {
-			var _ = this;
+			var that = this;
+			var data = this.options.data;
 			// 绑定书签长按事件
-			_.$bookmark.longPress(function () {
-				if (_.status !== "editing") {
-					_.status = "editing";
+			this.$ele.longPress(function () {
+				if (that.status !== "editing") {
+					that.status = "editing";
 					$('.addbook').remove();
 					require(['jquery-sortable'], function () {
-						_.$bookmark.sortable({
+						that.$ele.sortable({
 							animation: 150,
 							fallbackTolerance: 3,
 							touchStartThreshold: 3,
@@ -231,13 +203,13 @@ require(['jquery'], function ($) {
 								var startID = evt.oldIndex,
 									endID = evt.newIndex;
 								if (startID > endID) {
-									Storage.bookMark.splice(endID, 0, Storage.bookMark[startID]);
-									Storage.bookMark.splice(startID + 1, 1);
+									data.splice(endID, 0, data[startID]);
+									data.splice(startID + 1, 1);
 								} else {
-									Storage.bookMark.splice(endID + 1, 0, Storage.bookMark[startID]);
-									Storage.bookMark.splice(startID, 1);
+									data.splice(endID + 1, 0, data[startID]);
+									data.splice(startID, 1);
 								}
-								store.set("bookMark", Storage.bookMark);
+								store.set("bookMark", data);
 							}
 						});
 					})
@@ -249,22 +221,22 @@ require(['jquery'], function ($) {
 								return;
 							}
 							$(".delbook").remove();
-							_.$bookmark.sortable("destroy");
-							_.status = "";
+							that.$ele.sortable("destroy");
+							that.status = "";
 						});
 					});
-					var $list = _.$bookmark.find(".list");
+					var $list = that.$list;
 					for (var i = $list.length; i > -1; i--) {
 						$list.eq(i).find(".img").prepend('<div class="delbook"></div>');
 					}
 				}
 			});
-			_.$bookmark.on('click', function (evt) {
-				if (evt.target !== this || _.status === 'editing' || $('.addbook').hasClass('animation') || Storage.bookMark.length >= 20) {
+			this.$ele.on('click', function (evt) {
+				if (evt.target !== this || that.status === 'editing' || $('.addbook').hasClass('animation') || data.length >= 20) {
 					return;
 				}
 				if ($('.addbook').length === 0) {
-					_.$bookmark.append('<div class="list addbook"><div class="img"><svg viewBox="0 0 1024 1024"><path d="M736.1 480.2H543.8V287.9c0-17.6-14.4-32-32-32s-32 14.4-32 32v192.2H287.6c-17.6 0-32 14.4-32 32s14.4 32 32 32h192.2v192.2c0 17.6 14.4 32 32 32s32-14.4 32-32V544.2H736c17.6 0 32-14.4 32-32 0.1-17.6-14.3-32-31.9-32z" fill="#555"></path></svg></div></div>');
+					that.$ele.append('<div class="list addbook"><div class="img"><svg viewBox="0 0 1024 1024"><path d="M736.1 480.2H543.8V287.9c0-17.6-14.4-32-32-32s-32 14.4-32 32v192.2H287.6c-17.6 0-32 14.4-32 32s14.4 32 32 32h192.2v192.2c0 17.6 14.4 32 32 32s32-14.4 32-32V544.2H736c17.6 0 32-14.4 32-32 0.1-17.6-14.3-32-31.9-32z" fill="#555"></path></svg></div></div>');
 					$('.addbook').click(function () {
 						$('.addbook').remove();
 						// 取消书签编辑状态
@@ -327,10 +299,10 @@ require(['jquery'], function ($) {
 					}, 400);
 				}
 			});
-			_.$bookmark.on('click', '.list', function (evt) {
+			this.$ele.on('click', '.list', function (evt) {
 				evt.stopPropagation();
 				var dom = $(evt.currentTarget);
-				if (_.status !== "editing") {
+				if (that.status !== "editing") {
 					var url = dom.data("url");
 					if (url) {
 						switch (url) {
@@ -343,88 +315,86 @@ require(['jquery'], function ($) {
 					}
 				} else {
 					if (evt.target.className === "delbook") {
-						_.del(dom.index());
+						that.del(dom.index());
 					}
 				}
 			});
 		},
 		del: function (index) {
-			var _ = this;
-			_.$bookmark.css("overflow", "visible");
-			var dom = _.$bookmark.find('.list').eq(index);
+			var that = this;
+			var data = this.options.data;
+			this.$ele.css("overflow", "visible");
+			var dom = this.$ele.find('.list').eq(index);
 			dom.css({ transform: "translateY(60px)", opacity: 0, transition: ".3s" });
 			dom.on('transitionend', function (evt) {
 				if (evt.target !== this) {
 					return;
 				}
 				dom.remove();
-				_.$bookmark.css("overflow", "hidden");
+				that.$ele.css("overflow", "hidden");
 			});
-			Storage.bookMark.splice(index, 1);
-			store.set("bookMark", Storage.bookMark);
+			data.splice(index, 1);
+			store.set("bookMark", data);
 		},
 		add: function (name, url, icon) {
-			var _ = this;
+			var data = this.options.data;
 			url = url.match(/:\/\//) ? url : "http://" + url;
-			var i = Storage.bookMark.length - 1;
+			var i = data.length - 1;
 			var dom = $('<div class="list" data-url="' + url + '"><div class="img" style="background-image:url(' + icon + ')"></div><div class="text">' + name + '</div></div>');
-			_.$bookmark.append(dom);
+			this.$ele.append(dom);
 			dom.css({ marginTop: "60px", opacity: "0" }).animate({ marginTop: 0, opacity: 1 }, 300);
-			Storage.bookMark.push({ name: name, url: url, icon: icon });
-			store.set("bookMark", Storage.bookMark);
+			data.push({ name: name, url: url, icon: icon });
+			store.set("bookMark", data);
 		}
-	};
-	// 初始化首页书签模块
-	bookMark.init();
+	}
 
 	/**
-	 * 搜索历史模块
+	 * 搜索历史构建函数
 	 * @function init 初始化
 	 * @function load 加载HTML
 	 * @function bind 绑定事件
 	 * @function add 添加历史
 	 * @function empty 清空历史
 	 */
-	var searchHistory = {
+	var searchHistoryFn = function (ele, options) {
+		this.$ele = $(ele);
+		this.options = {
+			data: []
+		};
+		this.options = $.extend({}, this.options, options);
+		this.init();
+	}
+	searchHistoryFn.prototype = {
 		init: function () {
-			var _ = this;
-			_.$history = $('.history');
-			var arr = store.get("history");
-			if (arr === null) {
-				arr = [];
-			}
-			Storage.history = arr.slice(0, 10);
-			_.load();
-			_.bind();
+			var data = this.options.data;
+			data = data.slice(0, 10);
+			this.load();
+			this.bind();
 		},
 		load: function () {
-			var _ = this;
+			var data = this.options.data;
 			var html = '';
-			var l = Storage.history.length;
+			var l = data.length;
 			for (var i = 0; i < l; i++) {
-				html += '<li>' + Storage.history[i] + '</li>';
+				html += '<li>' + data[i] + '</li>';
 			}
-			_.$history.find('.content').html(html);
-			if (l >= 1) {
-				$('.emptyHistory').show();
-			} else {
-				$('.emptyHistory').hide();
-			}
+			this.$ele.find('.content').html(html);
+			l ? $('.emptyHistory').show() : $('.emptyHistory').hide();
 		},
 		bind: function () {
-			var _ = this;
+			var that = this;
 			// 监听touch事件，防止点击后弹出或收回软键盘
 			$('.emptyHistory')[0].addEventListener("touchstart", function (e) {
 				e.preventDefault();
 			}, false);
 			$('.emptyHistory')[0].addEventListener("touchend", function (e) {
 				if ($('.emptyHistory').hasClass('animation')) {
-					_.empty();
+					that.empty();
 				} else {
 					$('.emptyHistory').addClass('animation');
 				}
 			}, false);
-			_.$history.click(function (evt) {
+			this.$ele.click(function (evt) {
 				if (evt.target.nodeName === "LI") {
 					$('.search-input').val(evt.target.innerText).trigger("propertychange");
 					$('.search-btn').click();
@@ -432,26 +402,27 @@ require(['jquery'], function ($) {
 			});
 		},
 		add: function (text) {
-			if (Storage.setData.searchHistory === "1") {
-				var _ = this;
-				var pos = Storage.history.indexOf(text);
+			var data = this.options.data;
+			if (Storage.setData.searchHistory === true) {
+				var pos = data.indexOf(text);
 				if (pos !== -1) {
-					Storage.history.splice(pos, 1);
+					data.splice(pos, 1);
 				}
-				Storage.history.unshift(text);
-				_.load();
-				store.set("history", Storage.history);
+				data.unshift(text);
+				this.load();
+				store.set("history", data);
 			}
 		},
 		empty: function () {
-			var _ = this;
-			Storage.history = [];
-			_.load();
-			store.set("history", Storage.history);
+			this.options.data = [];
+			store.set("history", []);
+			this.load();
 		}
 	}
-	// 初始化搜索历史模块
-	searchHistory.init();
+
+	// 开始构建
+	var bookMark = new bookMarkFn($('.bookmark'), { data: store.get("bookMark") })
+	var searchHistory = new searchHistoryFn($('.history'), { data: store.get("history") });
 
 	/**
 	 * 更改地址栏URL参数
@@ -500,7 +471,7 @@ require(['jquery'], function ($) {
 	});
 
 	// 返回按键被点击
-	window.addEventListener("popstate", function (e) {
+	window.addEventListener("popstate", function () {
 		if ($('.page-search').is(":visible")) {
 			$('body').css("pointer-events", "none");
 			history.replaceState(null, document.title, location.origin + location.pathname);
@@ -909,19 +880,13 @@ require(['jquery'], function ($) {
 					<div class="set-text">
 						<p class="set-title">夜间模式</p>
 					</div>
-					<select class="set-select">
-						<option value="0">关闭</option>
-						<option value="1">开启</option>
-					</select>
+					<input type="checkbox" value="0" class="set-checkbox" autocomplete="off">
 				</li>
 				<li class="set-option" data-value="searchHistory">
 					<div class="set-text">
 						<p class="set-title">记录搜索历史</p>
 					</div>
-					<select class="set-select">
-						<option value="0">关闭</option>
-						<option value="1">开启</option>
-					</select>
+					<input type="checkbox" value="0" class="set-checkbox" autocomplete="off">
 				</li>
 				<li class="set-option" data-value="delLogo">
 					<p class="set-title">恢复默认壁纸和LOGO</p>
@@ -951,23 +916,28 @@ require(['jquery'], function ($) {
 				<li class="set-option">
 					<div class="set-text">
 						<p class="set-title">关于</p>
-						<p class="set-description">当前版本：1.48（20200315）<br>作者：BigLop</p>
+						<p class="set-description">当前版本：1.49（20200318）<br>作者：BigLop</p>
 					</div>
 				</li>
 			</ul>
 		</div>`);
 
 		$(".set-from").show();
+		$(".set-from").addClass('animation');
 
 		var browser = browserInfo();
 		if (browser === 'via') { // 只有VIA浏览器才能显示
 			$('option[value=via]').show();
 		}
 
-		$.each(Storage.setData, function (i, n) {
+		$.each(Storage.setData, function (i, v) {
 			var select = $(".set-option[data-value=" + i + "]").find(".set-select");
 			if (select) {
-				select.val(n);
+				select.val(v);
+			}
+			var checkbox = $(".set-option[data-value=" + i + "]").find(".set-checkbox");
+			if (checkbox) {
+				checkbox.prop("checked", v);
 			}
 		});
 
@@ -981,8 +951,9 @@ require(['jquery'], function ($) {
 			});
 		});
 
-		$(".set-option").click(function () {
-			var value = $(this).data("value");
+		$(".set-option").click(function (evt) {
+			var $this = $(this);
+			var value = $this.data("value");
 			if (value === "wallpaper") {
 				uploadFile(function () {
 					var file = this.files[0];
@@ -1012,7 +983,7 @@ require(['jquery'], function ($) {
 				store.set("setData", Storage.setData);
 				location.reload();
 			} else if (value === "openurl") {
-				open($(this).find('.set-description').text());
+				open($this.find('.set-description').text());
 			} else if (value === "export") {
 				var oInput = $('<input>');
 				oInput.val('{"bookMark":' + JSON.stringify(store.get('bookMark')) + '}');
@@ -1031,6 +1002,21 @@ require(['jquery'], function ($) {
 				} catch (e) {
 					alert("导入失败!");
 				}
+			} else if (evt.target.className !== 'set-select' && $this.find('.set-select').length > 0) {
+				$.fn.openSelect = function () {
+					return this.each(function (idx, domEl) {
+						if (document.createEvent) {
+							var event = document.createEvent("MouseEvents");
+							event.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+							domEl.dispatchEvent(event);
+						} else if (element.fireEvent) {
+							domEl.fireEvent("onmousedown");
+						}
+					});
+				}
+				$this.find('.set-select').openSelect();
+			} else if (evt.target.className !== 'set-checkbox' && $this.find('.set-checkbox').length > 0) {
+				$this.find('.set-checkbox').prop("checked", !$this.find('.set-checkbox').prop("checked")).change();
 			}
 		});
 
@@ -1053,7 +1039,18 @@ require(['jquery'], function ($) {
 			// 应用设置
 			loadStorage.applyItem();
 		});
-		$(".set-from").addClass('animation');
+
+		$(".set-checkbox").change(function () {
+			var dom = $(this),
+				item = dom.parent().data("value"),
+				value = dom.prop("checked");
+			// 保存设置
+			Storage.setData[item] = value;
+			store.set("setData", Storage.setData);
+			// 应用设置
+			loadStorage.applyItem();
+		});
+
 	});
 
 	// 下滑进入搜索
