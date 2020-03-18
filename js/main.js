@@ -1,5 +1,5 @@
 require.config({
-	urlArgs: "v=1.49.158453",
+	urlArgs: "v=1.49.158454",
 	baseUrl: "js/lib"
 });
 
@@ -181,7 +181,6 @@ require(['jquery'], function ($) {
 				html += '<div class="list" data-url="' + data[i].url + '"><div class="img" style="background-image:url(' + data[i].icon + ')"></div><div class="text">' + data[i].name + "</div></div>";
 			}
 			this.$ele.html(html);
-			this.$list = this.$ele.find(".list")
 			this.bind();
 		},
 		bind: function () {
@@ -225,7 +224,7 @@ require(['jquery'], function ($) {
 							that.status = "";
 						});
 					});
-					var $list = that.$list;
+					var $list = that.$ele.find(".list");
 					for (var i = $list.length; i > -1; i--) {
 						$list.eq(i).find(".img").prepend('<div class="delbook"></div>');
 					}
@@ -934,7 +933,7 @@ require(['jquery'], function ($) {
 				<li class="set-option">
 					<div class="set-text">
 						<p class="set-title">关于</p>
-						<p class="set-description">当前版本：1.49.158453<br>作者：BigLop</p>
+						<p class="set-description">当前版本：1.49.158454<br>作者：BigLop</p>
 					</div>
 				</li>
 			</ul>
