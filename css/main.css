@@ -16,7 +16,7 @@ a{color:var(--dark);text-decoration:none;}
 body {
     font-size: 14px;
     background: var(--bg);
-    background-size: 100%;
+    background-size: cover;
     background-position: top center;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -563,6 +563,7 @@ body,html {
     position: relative;
     top: 0;
     left: 0;
+    right: 0;
 }
 .choice-cut .list .content .shl{
     font-size: 8px;
@@ -673,6 +674,69 @@ body,html {
     margin-left: 12px;
     letter-spacing: -0.5px;
 }
+/* 精选 - 今日高分推荐 */
+.video-list {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    margin: 0;
+    padding: 0;
+    top: 9px;
+}
+.video-preview {
+    position: relative;
+}
+.video-title {
+    font-family: PingFang-SC-Heavy;
+    font-size: 12px;
+    color: #fff;
+    height: 17px;
+    line-height: 17px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.video-time {
+    margin-top: 1px;
+    opacity: 0.5;
+    font-family: GoogleSans-Bold;
+    font-size: 8px;
+    color: #fff;
+    height: 10px;
+    line-height: 10px;
+}
+.video-poster {
+    width: 100%;
+    height: 95px;
+    margin-top: 8px;
+    background: rgba(0,0,0,0.3);
+    background-size: cover;
+    border-radius: 6px;
+    position: relative;
+}
+
+/* 精选 - 今日份壁纸 */
+.choice-cut .list .content .back-hl{
+    left:0;right:0;text-align:center;
+}
+.choice-cut .list .content .back-img{
+    width: 100px;height: 195px;border-radius: 15px;margin: -15px -20px;background-size: cover;
+}
+.choice-cut .list .content .back-btn{
+    bottom: 20px;
+    color: #222;
+    border-radius: 10px;
+    width: 60px;
+    height: 20px;
+    background: #fff;
+    font-size: 8px;
+    font-weight: bold;
+    position: absolute;
+    text-align: center;
+    line-height: 20px;
+    display: none;
+}
+
 /* 精选 - 知乎热榜 */
 .audio-list{
     width: 100%;
@@ -680,9 +744,6 @@ body,html {
     overflow: hidden;
     position: relative;
     height: 50px;
-}
-.audio-list .slick-track, .slick-slider .slick-list{
-    transform: translate3d(0, 0, 0);
 }
 .audio-list .audio-item{
     display: flex;
@@ -692,7 +753,7 @@ body,html {
 .audio-list .audio-item-icon{
     width: 16px;
     height: 16px;
-    background-image: url(http://sm01.alicdn.com/L1/272/6837/static/wap/img/ball.png);
+    background-image: url(https://sm01.alicdn.com/L1/272/6837/static/wap/img/ball.png);
     background-size: cover;
     background-repeat: no-repeat;
     margin-right: 10px;

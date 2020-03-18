@@ -1,5 +1,5 @@
 require.config({
-	urlArgs: "v=1.49",
+	urlArgs: "v=1.49.158453",
 	baseUrl: "js/lib"
 });
 
@@ -177,7 +177,7 @@ require(['jquery'], function ($) {
 		init: function () {
 			var html = '';
 			var data = this.options.data;
-			for (var i = 0; i < data.length; i++) {
+			for (var i = 0, l = data.length; i < l; i++) {
 				html += '<div class="list" data-url="' + data[i].url + '"><div class="img" style="background-image:url(' + data[i].icon + ')"></div><div class="text">' + data[i].name + "</div></div>";
 			}
 			this.$ele.html(html);
@@ -523,7 +523,7 @@ require(['jquery'], function ($) {
 		} else {
 			$(".history").hide();
 			$(".empty-input").show();
-			$(".search-btn").html(/[\w\-_]+(\.[\w\-_]+)?([0-9a-z_!~*'().&=+$%-]+:)?([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?.*\.(?:(?!(aac|ai|aif|apk|arj|asp|aspx|atom|avi|bak|bat|bin|bmp|cab|cda|cer|cfg|cfm|cgi|class|cpl|cpp|cs|css|csv|cur|dat|db|dbf|deb|dll|dmg|dmp|doc|drv|ejs|eot|eps|exe|flv|fnt|fon|gif|gz|htm|icns|ico|img|ini|iso|jad|jar|java|jpeg|jpg|js|json|jsp|key|lnk|log|mdb|mid|midi|mkv|mov|mpa|mpeg|mpg|msi|odf|odp|ods|odt|ogg|otf|part|pdf|php|pkg|pls|png|pps|ppt|pptx|psd|py|rar|rm|rpm|rss|rtf|sav|sql|svg|svgz|swf|swift|sys|tar|tex|tgz|tif|tmp|toast|ttf|txt|vb|vcd|vob|wav|wbmp|webm|webp|wks|wma|wmv|woff|wpd|wpl|wps|wsf|xhtml|xlr|xls|xml|zip)).)+/.test(wd) ? "进入" : "搜索");
+			$(".search-btn").html(/^\b(((https?|ftp):\/\/)?[-a-z0-9]+(\.[-a-z0-9]+)*\.(?:com|net|org|int|edu|gov|mil|arpa|asia|biz|info|name|pro|coop|aero|museum|[a-z][a-z]|((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]\d)|\d))\b(\/[-a-z0-9_:\@&?=+,.!\/~%\$]*)?)$/i.test(wd) ? "进入" : "搜索");
 			escape(wd).indexOf("%u") < 0 ? $(".shortcut2").show() : $(".shortcut3").show();
 			$.ajax({
 				url: "https://suggestion.baidu.com/su",
@@ -662,30 +662,19 @@ require(['jquery'], function ($) {
 			html = '<div class="page-bg"></div><div class="page-choice"><div class="page-content"><ul class="choice-ul">',
 			tabHtml = '<li class="current">捷径</li>',
 			contentHtml = `<li class="choice-cut swiper-slide">
-			<div class="list w2 h2"><a class="flex-1" href="https://quark.sm.cn/s?q=%E4%BB%8A%E5%A4%A9%E5%A4%A9%E6%B0%94"><div class="content weather"><div>访问中</div><div></div><div></div></div></a><a class="flex-right"><div class="content" style="background-image:linear-gradient(148deg, rgb(0, 188, 150) 2%, rgb(129, 239, 201) 98%)"><div class="hl">一言</div><div class="shl" id="hitokoto" style="text-align: center;top: 36px;height: 96px;white-space: pre-line;left: 15px;right: 15px;"><script src="https://v1.hitokoto.cn/?encode=js&select=%23hitokoto" defer></script></div></div></a></div>
+			<div class="list h2"><a class="flex-1 content weather" href="https://quark.sm.cn/s?q=天气"><div>访问中</div><div></div><div></div></a><a class="flex-right content" style="background-image:linear-gradient(148deg, rgb(0, 188, 150) 2%, rgb(129, 239, 201) 98%)"><div class="hl">一言</div><div class="shl" id="hitokoto" style="text-align: center;top: 36px;height: 96px;white-space: pre-line;left: 15px;right: 15px;"><script src="https://v1.hitokoto.cn/?encode=js&select=%23hitokoto" defer></script></div></a></div>
 			<div class="list h3">
 				<div class="flex-left">
 					<div class="list cmp-flex"><a href="https://quark.sm.cn/s?q=NBA"><div class="content" style="background-image:linear-gradient(-36deg, rgb(0, 88, 178) 0%, rgb(102, 158, 214) 99%)"><div class="hl">NBA</div><div class="cmp-icon" style="left: 60px; top: 28px; width: 34px; height: 61px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201912/6abef9b0-1837-11ea-ae2f-d1f91872b195.png);"></div></div></a></div>
 					<div class="list cmp-flex"><a href="https://broccoli.uc.cn/apps/pneumonia/routes/index"><div class="content" style="background-image:linear-gradient(136deg, rgb(97, 71, 183) 0%, rgb(132, 113, 196) 100%)"><div style="left:10px" class="hl">新肺炎动态</div><div class="cmp-icon" style="bottom: 0px; width: 47px; height: 45px; background-image: url(https://gw.alicdn.com/L1/723/1579592073/31/78/ef/3178efce546d72e6f0772755ff1020cb.png);"></div></div></a></div>
 				</div>
-				<a class="flex-1 content" href="https://s.weibo.com/top/summary" style="background-image:linear-gradient(135deg, rgb(34, 34, 80) 1%, rgb(60, 60, 89) 100%)"><div class="hl relative">热搜榜</div><div class="news-list"></div></a>
+				<a class="flex-1 content" href="https://quark.sm.cn/s?q=热搜&tab=quark" style="background-image:linear-gradient(135deg, rgb(34, 34, 80) 1%, rgb(60, 60, 89) 100%)"><div class="hl relative">热搜榜</div><div class="news-list"></div></a>
 			</div>
-			<div class="list h2">
-				<a class="flex-1 content" href="https://quark.sm.cn/s?q=%E7%83%AD%E6%90%9C&tab=zhihu" style="background-image:linear-gradient(135deg, rgb(52, 55, 60) 0%, rgb(77, 78, 86) 100%)">
-				<p class="hl relative">知乎热榜</p>
-				<div class="audio-list">
-				
-				<div class="slick-track" style="opacity: 1; transform: translate3d(0px, 0px, 0px);">
-
-				</div>
-				
-				</div>
-				<div class="cmp-icon" style="width: 146px;height: 99px;right: 10px;bottom: 0;background-image: url(https://image.uc.cn/s/uae/g/1y/broccoli/siaNqA6cQ/9JjV6iUso/resources/png/zhihu-icon.1509e7f13366ef5f8c0fab68526ab098.png);"></div>
-				</a>
-			</div>
+			<div class="list h3"><a class="flex-1 content" href="https://quark.sm.cn/api/rest?method=movieRec.index&format=html" style="background-image:linear-gradient(143deg, #3c446e 1%, #697994 100%)"><div class="hl relative">今日高分影荐</div><div class="video-list"><div class="video-swipe"><div class="swiper-wrapper"></div></div></div></a><a class="flex-right content"><div class="hl back-hl">今日份壁纸</div><div class="back-img"></div><div class="back-btn">设置为壁纸</div></a></div>
+			<div class="list h2"><a class="flex-1 content" href="https://quark.sm.cn/s?q=热搜&tab=zhihu" style="background-image:linear-gradient(135deg, rgb(52, 55, 60) 0%, rgb(77, 78, 86) 100%)"><p class="hl relative">知乎热榜</p><div class="audio-list"><div class="audio-swipe"><div class="swiper-wrapper"></div></div></div><div class="cmp-icon" style="width: 146px;height: 99px;right: 10px;bottom: 0;background-image: url(https://image.uc.cn/s/uae/g/1y/broccoli/siaNqA6cQ/9JjV6iUso/resources/png/zhihu-icon.1509e7f13366ef5f8c0fab68526ab098.png);"></div></a></div>
 			<div class="list"><a class="flex-1 content" href="https://m.qidian.com" style="background-image:linear-gradient(136deg, rgb(144, 148, 155) 0%, rgb(51, 51, 54) 100%)"><p class="hl">起点中文网</p><p class="shl">精彩好书推荐</p><div class="cmp-icon" style="right: 27px; top: 26px; width: 65px; height: 64px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201910/e6ccf190-fabb-11e9-ba63-ffe4f2687491.png);"></div></a><a class="flex-right content" href="https://quark.sm.cn/api/rest?method=quark_fanyi.dlpage&from=smor&safe=1&schema=v2&format=html&entry=shortcuts" style="linear-gradient(-36deg, rgb(97, 71, 183) 0%, rgb(132, 113, 196) 99%)"><div class="hl">夸克翻译</div><div class="cmp-icon" style="right: 0px; bottom: 0px; width: 47px; height: 45px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/202002/84db9310-52cc-11ea-8024-a1e03ff6fb9b.png);"></div></a></div>
 			<div class="list"><a class="flex-left content" style="background-image:linear-gradient(136deg, rgb(255, 81, 81) 0%, rgb(255, 111, 88) 100%)" href="https://quark.sm.cn/api/rest?method=learning_mode.home&format=html&schema=v2"><div class="hl">夸克学习</div><div class="cmp-icon" style="top: 44.5px; width: 42.5px; height: 45.5px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201912/c69a6570-2265-11ea-ad50-cbf7fc3a7d59.png);"></div></a><a class="flex-1 content" href="https://xw.qq.com" style="background-image:linear-gradient(to right bottom, #becce9, #98b1cf)"><p class="hl" style="left: 76px;top: 30px;">腾讯新闻</p><p class="shl" style="left: 76px;top: 51px;">新闻</p><div class="cmp-icon" style="left: 20px; top: 23px; width: 44px; height: 43.6px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201910/b56c1ef0-f007-11e9-bbee-8910d21fa281.png);"></div></a></div>
-			<div class="list w2"><a class="flex-1 content" href="https://quark.sm.cn/api/rest?format=html&method=lawservice.home&schema=v2" style="background-image:linear-gradient(136deg, rgb(38, 85, 248) 0%, rgb(20, 152, 230) 100%)"><p class="hl">夸克法律检索</p><p class="shl">专业权威法律检索</p><div class="cmp-icon" style="right: 19px; top: 21px; width: 80px; height: 70px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201912/80869b60-1835-11ea-ae2f-d1f91872b195.png);"></div></a><a class="flex-right content" href="https://quark.sm.cn/s?q=垃圾分类" style="background-image:linear-gradient(to right bottom, #7cecc6, #15b695)"><div class="hl">垃圾分类</div><div class="cmp-icon" style="right: 22px; top: 45px; width: 55px; height: 45px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201910/d0b3d560-f005-11e9-bbee-8910d21fa281.png);"></div></a></div>
+			<div class="list"><a class="flex-1 content" href="https://quark.sm.cn/api/rest?format=html&method=lawservice.home&schema=v2" style="background-image:linear-gradient(136deg, rgb(38, 85, 248) 0%, rgb(20, 152, 230) 100%)"><p class="hl">夸克法律检索</p><p class="shl">专业权威法律检索</p><div class="cmp-icon" style="right: 19px; top: 21px; width: 80px; height: 70px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201912/80869b60-1835-11ea-ae2f-d1f91872b195.png);"></div></a><a class="flex-right content" href="https://quark.sm.cn/s?q=垃圾分类" style="background-image:linear-gradient(to right bottom, #7cecc6, #15b695)"><div class="hl">垃圾分类</div><div class="cmp-icon" style="right: 22px; top: 45px; width: 55px; height: 45px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201910/d0b3d560-f005-11e9-bbee-8910d21fa281.png);"></div></a></div>
 			</li>`;
 
 		$.each(data, function (i, n) {
@@ -716,7 +705,7 @@ require(['jquery'], function ($) {
 				return;
 			}
 			$(".page-choice").off("transitionend");
-			$('.swiper-wrapper').html(contentHtml);
+			$('.choice-swipe').find('.swiper-wrapper').html(contentHtml);
 			// 绑定事件
 			var last_page = 0;
 
@@ -754,7 +743,7 @@ require(['jquery'], function ($) {
 				});
 			});
 
-			// 地理位置|天气|气温|空气质量
+			// 天气
 			$.ajax({
 				url: "https://ai.sm.cn/quark/1/api?format=json&method=weather&callback=weather",
 				type: "get",
@@ -772,57 +761,86 @@ require(['jquery'], function ($) {
 				}
 			})
 
-			// 微博热搜
+			// 热搜榜 | 今日高分影荐 | 知乎热榜
 			$.ajax({
-				url: "https://s.weibo.com/ajax/jsonp/gettopsug?_cb=gettopsug",
+				url: "https://ai.sm.cn/quark/1/api?format=json&method=newchosen",
 				type: "get",
 				dataType: "jsonp",
-				jsonpCallback: "gettopsug",
 				success: function (res) {
 					var data = res.data;
-					var html = '';
-					for (var i = 0; i < 4; i++) {
-						html += '<div class="news-item"><div class="news-item-count">' + (i + 1) + '</div><div class="news-item-title">' + data.list[i].word + '</div><div class="news-item-hot">' + data.list[i].num + '</div></div>';
+					for (var i = 0, l = data.length; i < l; i++) {
+						if (data[i].name === "热搜榜") {
+							var html = '';
+							for (var ii = 0, ll = data[i].value.length; ii < ll; ii++) {
+								html += '<div class="news-item"><div class="news-item-count">' + (ii + 1) + '</div><div class="news-item-title">' + data[i].value[ii].title + '</div><div class="news-item-hot">' + data[i].value[ii].hot + '</div></div>';
+							}
+							$('.news-list').html(html);
+						} else if (data[i].name === "今日高分影荐") {
+							var html = '';
+							for (var ii = 0, ll = data[i].value.content.length; ii < ll; ii++) {
+								html += '<div class="video-preview swiper-slide"><div class="video-title">' + data[i].value.content[ii].title + '</div><div class="video-time">' + data[i].value.content[ii].duration + '</div><div class="video-poster" style="background-image: url(' + data[i].value.content[ii].img + ');"></div></div>';
+							}
+							$('.video-list').find('.swiper-wrapper').html(html);
+							require(['Swiper'], function (Swiper) {
+								var swiper = new Swiper('.video-swipe', {
+									loop: true,
+									autoplay: {
+										delay: 5000,
+										disableOnInteraction: false,
+									}
+								});
+							})
+						} else if (data[i].name === "知乎热榜") {
+							var html = '';
+							for (var ii = 0, ll = data[i].value.length; ii < ll; ii++) {
+								html += '<div class="audio-item swiper-slide"><div class="audio-item-icon"></div><div class="audio-item-title">' + data[i].value[ii].title + '</div></div>';
+							}
+							$('.audio-list').find('.swiper-wrapper').html(html);
+							require(['Swiper'], function (Swiper) {
+								var swiper = new Swiper('.audio-swipe', {
+									allowTouchMove: false,
+									height: 54,
+									direction: 'vertical',
+									slidesPerView: 2,
+									slidesPerGroup: 2,
+									loop: true,
+									autoplay: {
+										delay: 5000,
+										disableOnInteraction: false,
+									},
+								});
+							})
+						}
 					}
-					$('.news-list').html(html);
+
 				}
 			});
 
-			//知乎热榜
+			// 今日份壁纸
 			$.ajax({
-				url: "https://quark.sm.cn/api/rest?method=Newstoplist.zhihu",
+				url: "https://jsonp.afeld.me/?callback=&url=https%3A%2F%2Fcn.bing.com%2FHPImageArchive.aspx%3Fformat%3Djs%26cc%3Djp%26idx%3D0%26n%3D1",
 				type: "get",
 				dataType: "jsonp",
 				success: function (res) {
-					var data = res.data;
-					var html = '';
-					for (var i = 0; i < 8; i++) {
-						html += '<div class="audio-item"><div class="audio-item-icon"></div><div class="audio-item-title">' + data[i].title + '</div></div>'
-					}
-					for (var i = 0; i < 2; i++) {
-						html += '<div class="audio-item"><div class="audio-item-icon"></div><div class="audio-item-title">' + data[i].title + '</div></div>'
-					}
-					var $slick_track = $('.audio-list').find('.slick-track');
-					$slick_track.html(html);
-					var curIndex = 2;
-					setInterval(function () {
-						$slick_track.css({
-							transform: "translate3d(0px, -" + curIndex * 27 + "px, 0px)",
-							transition: "transform 500ms ease 0s"
-						});
-						curIndex += 2;
-						$slick_track.on('transitionend', function (evt) {
-							$slick_track.off('transitionend').css({
-								transition: ""
-							})
-							if (curIndex >= 10) {
-								curIndex = 2;
-								$slick_track.css({
-									transform: "translate3d(0px, 0px, 0px)"
-								})
-							}
-						});
-					}, 5000);
+					var url = 'https://www.bing.com' + res.images[0].url.replace('1920x1080', '1080x1920');
+					$('.back-img').css('background-image', 'url('+url+')')
+					$('.back-btn').show().click(function () {
+						var canvas = document.createElement("canvas");
+						var ctx = canvas.getContext("2d");
+						var img = new Image;
+						img.crossOrigin = 'Anonymous';
+						img.src = url;
+						img.onload = function () {
+							canvas.height = 1920;
+							canvas.width = 1080;
+							ctx.drawImage(img, 0, 0, 1080, 1920);
+							var dataURL = canvas.toDataURL("image/jpg");
+							Storage.setData.wallpaper = dataURL;
+							store.set("setData", Storage.setData);
+							loadStorage.applyItem();
+							canvas = null;
+						};
+					});
 				}
 			});
 
@@ -916,7 +934,7 @@ require(['jquery'], function ($) {
 				<li class="set-option">
 					<div class="set-text">
 						<p class="set-title">关于</p>
-						<p class="set-description">当前版本：1.49（20200318）<br>作者：BigLop</p>
+						<p class="set-description">当前版本：1.49.158453<br>作者：BigLop</p>
 					</div>
 				</li>
 			</ul>
