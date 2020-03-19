@@ -849,21 +849,9 @@ require(['jquery'], function ($) {
 					var url = 'https://www.bing.com' + res.images[0].url.replace('1920x1080', '1080x1920');
 					$('.back-img').css('background-image', 'url(' + url + ')')
 					$('.back-btn').show().click(function () {
-						var canvas = document.createElement("canvas");
-						var ctx = canvas.getContext("2d");
-						var img = new Image;
-						img.crossOrigin = 'Anonymous';
-						img.src = url;
-						img.onload = function () {
-							canvas.height = 1920;
-							canvas.width = 1080;
-							ctx.drawImage(img, 0, 0, 1080, 1920);
-							var dataURL = canvas.toDataURL("image/jpg");
-							Storage.setData.wallpaper = dataURL;
-							store.set("setData", Storage.setData);
-							loadStorage.applyItem();
-							canvas = null;
-						};
+						Storage.setData.wallpaper = url;
+						store.set("setData", Storage.setData);
+						loadStorage.applyItem();
 					});
 				}
 			});
