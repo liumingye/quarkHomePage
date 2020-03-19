@@ -13,6 +13,7 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:b
 	box-sizing: border-box;
 }
 a{color:var(--dark);text-decoration:none;}
+ul,li{list-style-type:none}
 body {
     font-size: 14px;
     background: var(--bg);
@@ -22,7 +23,7 @@ body {
     background-attachment: fixed;
 }
 body,html {
-	height: 100%;
+    height: 100%;
 }
 ::-webkit-scrollbar {
 	width: 0;
@@ -80,16 +81,15 @@ body,html {
 .logo img {
     width: 100%;
 }
-.ornament-input-group {
+.ornament-input-group, .anitInput {
 	border: 1.2px solid var(--dark);
 	min-height: 50px;
 	border-radius: 999px;
 	margin-bottom: 20px;
-    transition: transform .4s,opacity .25s;
+    transition: .3s;
 }
-.ornament-input-group.animation {
+.ornament-input-group.animation, .anitInput.animation {
     opacity:0;
-    transform:translateX(-28px) translateY(40px) scale(.94,.7) translate3d(0,0,0);
 }
 .bookmark{
 	text-align: center;
@@ -97,10 +97,11 @@ body,html {
 	flex-wrap: wrap;
     margin: 0 -12%;
     padding: 0 30px 180px;
-    transition: transform .3s, opacity .3s;
+    transition: transform .4s,opacity .5s;
     min-height: 90px;
 }
 .bookmark.animation {
+    opacity:0;
     transform:translateY(80px);
 }
 .bookmark .list {
@@ -294,8 +295,7 @@ body,html {
     user-select: text;
 }
 
-.empty-input{display:none;width:50px;height:55px;background:url(../img/delete.png) no-repeat center;background-size:17px;
-    height: 100%;
+.empty-input{display:none;width:50px;height:34px;background:url(../img/delete.png) no-repeat center;background-size:16px;
 }
 .search-btn{padding-right:15px;width:60px;text-align:center;line-height:55px;
     height: 100%;
@@ -473,6 +473,7 @@ body,html {
 .choice-ul li:active{background:#ddd;}
 .active-span{position:absolute;top:48px;width:18px;height: 2px;background:var(--dark);border-radius:999px;
     transition: transform .3s;
+    left: 40px;
 }
 .choice-close{
     position:absolute;bottom:0;width:100%;height:40px;
@@ -521,6 +522,9 @@ body,html {
 }
 .choice-cut .cmp-flex:first-child{
     margin-bottom: 15px;
+}
+.choice-cut .h3 .cmp-flex .content{
+    height: 90px;
 }
 .choice-cut .flex-right{
     margin-left: 15px;

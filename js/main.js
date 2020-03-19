@@ -1,5 +1,5 @@
 require.config({
-	urlArgs: "v=1.49.158460",
+	urlArgs: "v=1.49.158463",
 	baseUrl: "js/lib"
 });
 
@@ -154,7 +154,7 @@ require(['jquery'], function ($) {
 	 */
 	var openFile = function (callback) {
 		var input = $('<input type="file">');
-		input.on("input propertychange", callback);
+		input.on("input propertychange change", callback);
 		input.click();
 	}
 
@@ -229,7 +229,6 @@ require(['jquery'], function ($) {
 							fallbackTolerance: 3,
 							touchStartThreshold: 3,
 							ghostClass: "ghost",
-							filter: ".delbook",
 							onEnd: function (evt) {
 								var startID = evt.oldIndex,
 									endID = evt.newIndex;
@@ -484,9 +483,38 @@ require(['jquery'], function ($) {
 	$(".ornament-input-group").click(function () {
 		$('body').css("pointer-events", "none");
 		history.pushState(null, document.title, changeParam("page", "search"));
+		// 动画输入框复合
+		var top = $(".ornament-input-group").position().top;
+		$('.anitInput').remove()
+		var ornamentInput = $(".ornament-input-group");
+		var anitInput = ornamentInput.clone();
+		anitInput.attr('class', 'anitInput').css({
+			'position': 'absolute',
+			'top': top,
+			'left': ornamentInput.position().left,
+			'width': ornamentInput.outerWidth(),
+			'height': ornamentInput.outerHeight(),
+			'pointer-events': 'none',
+			'transform': ''
+		})
+		$('.ornament-input-group').css('opacity', 0);
+		$('body').append(anitInput);
+		$(window).unbind('resize').resize(function () {
+			var inputBg = $('.input-bg');
+			anitInput.css({
+				'transform': 'translateY(' + (inputBg.offset().top - top) + 'px) translate3d(0,0,0)',
+				'height': inputBg.outerHeight(),
+				'min-height': inputBg.outerHeight(),
+				'left': inputBg.offset().left,
+				'width': inputBg.outerWidth(),
+				'transition': '.3s'
+			});
+			anitInput.addClass("animation");
+		});
+		// 弹出软键盘
 		$(".s-temp").focus();
-		// 隐藏主页
-		$(".ornament-input-group,.bookmark").addClass("animation");
+		// 书签动画
+		$(".bookmark").addClass("animation");
 		// 显示搜索页
 		$(".page-search").show();
 		setTimeout(function () {
@@ -495,7 +523,7 @@ require(['jquery'], function ($) {
 					return;
 				}
 				$(".page-search").off('transitionend');
-				$(".search-input").val('').focus();
+				$(".search-input").focus();
 				$('body').css("pointer-events", "");
 			}).addClass("animation");
 			$(".history").show().addClass("animation");
@@ -515,9 +543,23 @@ require(['jquery'], function ($) {
 		if ($('.page-search').is(":visible")) {
 			$('body').css("pointer-events", "none");
 			history.replaceState(null, document.title, location.origin + location.pathname);
-			//主页
-			$(".ornament-input-group,.bookmark").removeClass("animation");
-			//搜索页
+			// 动画输入框分离
+			$(window).unbind('resize');
+			var anitInput = $('.anitInput');
+			var ornamentInput = $('.ornament-input-group');
+			anitInput.css({
+				'transform': '',
+				'top': ornamentInput.position().top,
+				'height': ornamentInput.outerHeight(),
+				'min-height': ornamentInput.outerHeight(),
+				'left': ornamentInput.position().left,
+				'width': ornamentInput.outerWidth(),
+				'transition': '.3s'
+			});
+			anitInput.removeClass("animation");
+			// 书签动画
+			$(".bookmark").removeClass("animation");
+			// 隐藏搜索页
 			$(".history").removeClass("animation");
 			$(".input-bg").removeClass("animation");
 			$(".shortcut").removeClass("animation");
@@ -528,14 +570,16 @@ require(['jquery'], function ($) {
 				}
 				$(".page-search").off('transitionend');
 				$(".page-search").hide();
-				//搜索页内容初始化
+				ornamentInput.css({ 'transition': 'none', 'opacity': '' });
+				anitInput.remove();
+				// 搜索页内容初始化
 				$(".suggestion").html("");
 				$(".search-btn").html("取消");
 				$(".shortcut1").show();
 				$(".shortcut2,.shortcut3,.empty-input").hide();
 				$(".search-input").val('');
-				$('body').css("pointer-events", "");
 				$('.emptyHistory').removeClass('animation');
+				$('body').css("pointer-events", "");
 			});
 		}
 	}, false);
@@ -879,10 +923,10 @@ require(['jquery'], function ($) {
 
 	$(".logo").click(() => {
 		var browser = browserInfo();
-		if (browser == 'via') {
-			self.location = "folder://";
-		} else if (browser == 'x') {
-			self.location = "x:bm?sort=default";
+		if (browser === 'via') {
+			location.href = "folder://";
+		} else if (browser === 'x') {
+			location.href = "x:bm?sort=default";
 		}
 	}).longPress(() => {
 		$('#app').append(`<div class="set-from">
@@ -964,7 +1008,7 @@ require(['jquery'], function ($) {
 				<li class="set-option">
 					<div class="set-text">
 						<p class="set-title">关于</p>
-						<p class="set-description">当前版本：1.49.158460<br>作者：BigLop</p>
+						<p class="set-description">当前版本：1.49.158463<br>作者：BigLop</p>
 					</div>
 				</li>
 			</ul>
@@ -1114,30 +1158,25 @@ require(['jquery'], function ($) {
 	// 下滑进入搜索
 	require(['touchSwipe'], function () {
 		$(".page-home").swipe({
-			swipeStatus: function (event, phase, direction, distance) {
+			swipeStatus: function (event, phase, direction, distance, duration, fingerCount, fingerData) {
 				if ($('.delbook').length !== 0) {
 					return;
 				}
-				if (phase === 'move') {
-					if (distance <= 10 || direction !== "down") {
-						return;
-					}
-					var height = $(document).height();
-					$('.ornament-input-group').css({ 'transform': 'translate3d(0,' + (distance / height) * 50 + 'px,0)', 'transition': 'none' });
-					$('.logo').attr("disabled", "disabled").css({ 'opacity': 1 - (distance / height) * 4, 'transition': 'none' });
-					$('.bookmark').attr("disabled", "disabled").css({ 'opacity': 1 - (distance / height) * 4, 'transform': 'scale(' + (1 - (distance / height) * .2) + ')', 'transition': 'none' });
+				if (phase === 'start') {
+					this.height = $(document).height();
+				} else if (phase === 'move') {
+					var sliding = Math.max(fingerData[0].end.y - fingerData[0].start.y, 0);
+					$('.logo').attr("disabled", true).css({ 'opacity': 1 - (sliding / this.height) * 4, 'transition': 'none' });
+					$('.ornament-input-group').css({ 'transform': 'translate3d(0,' + Math.min((sliding / this.height) * 50, 30) + 'px,0)', 'transition': 'none' });
+					$('.bookmark').attr("disabled", true).css({ 'opacity': 1 - (sliding / this.height) * 4, 'transform': 'scale(' + (1 - (sliding / this.height) * .3) + ')', 'transition': 'none' });
 				} else if (phase === 'end' || phase === 'cancel') {
-					$('.logo').removeAttr("disabled").removeAttr('style');
-					$('.bookmark').removeAttr("disabled").removeAttr('style');
-					$('.ornament-input-group').removeAttr('style');
+					$('.logo').removeAttr("disabled style");
+					$('.bookmark').removeAttr("disabled style");
 					if (distance >= 100 && direction === "down") {
 						$('.ornament-input-group').click();
-						$('.logo').css('opacity', '0');
-						$('.bookmark').css('opacity', '0');
 						setTimeout(function () {
-							$('.logo').css('opacity', '');
-							$('.bookmark').css('opacity', '');
-						}, 200);
+							$('.ornament-input-group').css("transform","");
+						}, 300);
 					}
 				}
 			}
