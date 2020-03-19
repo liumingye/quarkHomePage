@@ -1,5 +1,5 @@
 require.config({
-	urlArgs: "v=1.49.158454",
+	urlArgs: "v=1.49.158459",
 	baseUrl: "js/lib"
 });
 
@@ -149,12 +149,12 @@ require(['jquery'], function ($) {
 	};
 
 	/**
-	 * 文件上传函数
+	 * 文件打开函数
 	 * @function callback 回调函数
 	 */
-	var uploadFile = function (callback) {
+	var openFile = function (callback) {
 		var input = $('<input type="file">');
-		input.bind("change", callback);
+		input.on("input propertychange", callback);
 		input.click();
 	}
 
@@ -244,13 +244,36 @@ require(['jquery'], function ($) {
 						$('#app').append('<div class="addbook-shade"><div class="addbook-from"><div class="addbook-title">添加书签</div><div class="addbook-content"><input type="text" class="addbook-input addbook-name" placeholder="名字" /><input type="text" class="addbook-input addbook-url" placeholder="网址" value="http://" /><div id="addbook-upload">点击选择图标</div></div><div class="addbook-btn"><a class="addbook-close">取消</a><a class="addbook-ok">确定</a></div></div></div>');
 						//绑定事件
 						$("#addbook-upload").click(function () {
-							uploadFile(function () {
+							openFile(function () {
 								var file = this.files[0];
-								var reader = new FileReader();
-								reader.onload = function () {
-									$("#addbook-upload").html('<img src="' + this.result + '"></img><div>' + file.name + "</div>");
-								};
-								reader.readAsDataURL(file);
+								var imageData = new FormData();
+								imageData.append("file", 'multipart');
+								imageData.append("Filedata", file);
+								$("#addbook-upload").html('上传图标中...').css("pointer-events", "none");
+								$(".addbook-ok").css("pointer-events", "none");
+								$.ajax({
+									url: 'https://api.uomg.com/api/image.360',
+									type: 'POST',
+									data: imageData,
+									cache: false,
+									contentType: false,
+									processData: false,
+									dataType: 'json',
+									success: function (result) {
+										if (result.code == 1) {
+											$("#addbook-upload").html('<img src="' + result.imgurl + '"></img><div>' + file.name + '</div>');
+										} else {
+											$("#addbook-upload").html('上传图标失败请重试！');
+										}
+									},
+									error: function () {
+										$("#addbook-upload").html('上传图标错误请重试！');
+									},
+									complete:function(){
+										$("#addbook-upload").css("pointer-events", "");
+										$(".addbook-ok").css("pointer-events", "");
+									}
+								});
 							});
 						});
 						$(".addbook-ok").click(function () {
@@ -263,15 +286,15 @@ require(['jquery'], function ($) {
 									var canvas = document.createElement("canvas");
 									canvas.height = 100;
 									canvas.width = 100;
-									var context = canvas.getContext("2d");
-									context.fillStyle = "#f5f5f5";
-									context.arc(50, 50, 46, Math.PI * 2, 0, true);
-									context.fill();
-									context.fillStyle = "#222";
-									context.font = "40px Arial";
-									context.textAlign = "center";
-									context.textBaseline = "middle";
-									context.fillText(name.substr(0, 1), 50, 52);
+									var ctx = canvas.getContext("2d");
+									ctx.fillStyle = "#f5f5f5";
+									ctx.fillRect(0,0,100,100);
+									ctx.fill();
+									ctx.fillStyle = "#222";
+									ctx.font = "40px Arial";
+									ctx.textAlign = "center";
+									ctx.textBaseline = "middle";
+									ctx.fillText(name.substr(0, 1), 50, 52);
 									icon = canvas.toDataURL("image/png");
 								}
 								$(".addbook-close").click();
@@ -506,12 +529,11 @@ require(['jquery'], function ($) {
 		} else {
 			searchText(evt.target.innerText);
 		}
-
 	});
 
 	$(".search-input").on("input propertychange", function () {
-		var _ = this;
-		var wd = $(_).val();
+		var that = this;
+		var wd = $(that).val();
 		$(".shortcut1,.shortcut2,.shortcut3").hide();
 		if (!wd) {
 			$(".history").show();
@@ -532,7 +554,7 @@ require(['jquery'], function ($) {
 				timeout: 5000,
 				jsonpCallback: "sug",
 				success: function (res) {
-					if ($(_).val() !== wd) {
+					if ($(that).val() !== wd) {
 						return;
 					}
 					var data = res.s;
@@ -555,6 +577,9 @@ require(['jquery'], function ($) {
 				data: { query: wd },
 				timeout: 5000,
 				success: function (res) {
+					if ($(that).val() !== wd) {
+						return;
+					}
 					var data = res.data;
 					var html = '<li>快搜:</li>';
 					for (var i = 0, l = data.length; i < l; i++) {
@@ -822,7 +847,7 @@ require(['jquery'], function ($) {
 				dataType: "jsonp",
 				success: function (res) {
 					var url = 'https://www.bing.com' + res.images[0].url.replace('1920x1080', '1080x1920');
-					$('.back-img').css('background-image', 'url('+url+')')
+					$('.back-img').css('background-image', 'url(' + url + ')')
 					$('.back-btn').show().click(function () {
 						var canvas = document.createElement("canvas");
 						var ctx = canvas.getContext("2d");
@@ -933,7 +958,7 @@ require(['jquery'], function ($) {
 				<li class="set-option">
 					<div class="set-text">
 						<p class="set-title">关于</p>
-						<p class="set-description">当前版本：1.49.158454<br>作者：BigLop</p>
+						<p class="set-description">当前版本：1.49.158459<br>作者：BigLop</p>
 					</div>
 				</li>
 			</ul>
@@ -972,7 +997,7 @@ require(['jquery'], function ($) {
 			var $this = $(this);
 			var value = $this.data("value");
 			if (value === "wallpaper") {
-				uploadFile(function () {
+				openFile(function () {
 					var file = this.files[0];
 					var reader = new FileReader();
 					reader.onload = function () {
@@ -983,7 +1008,7 @@ require(['jquery'], function ($) {
 					reader.readAsDataURL(file);
 				});
 			} else if (value === "logo") {
-				uploadFile(function () {
+				openFile(function () {
 					var file = this.files[0];
 					var reader = new FileReader();
 					reader.onload = function () {

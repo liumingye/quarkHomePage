@@ -109,18 +109,15 @@ body,html {
     position: relative;
 }
 .bookmark .list .img {
-	width: 48px;
-	height: 48px;
+	width: 42px;
+	height: 42px;
     border-radius: 999px;
     margin: 0 auto;
     background-position:center;
-    background-size:48px;
+    background-size:cover;
     background-repeat:no-repeat;
     overflow: visible;
     position: relative;
-}
-.bookmark .addbook .img{
-    padding: 3px;
 }
 .bookmark .addbook .img svg{
     background: #f9f9f9;
@@ -137,8 +134,8 @@ body,html {
     padding: 8px 0;
 }
 .delbook{
-    top: -2px;
-    right: -2px;
+    top: -4px;
+    right: -4px;
     position:absolute;width:20px;height:20px;background:url(../img/delete.png) no-repeat center;background-size:20px;
     animation:scale .3s;
     transition: transform .3s;
@@ -173,8 +170,8 @@ body,html {
 .addbook-input{padding:12px 0;width:100%;border:0;border-bottom:1px solid #E9E7E7;color:var(--dark);background:var(--bg);}
 .addbook-input:hover{border-bottom:1px solid #0066CC;}
 #addbook-upload{height: 44px;line-height: 44px;text-align:center;margin:5px 0;}
-#addbook-upload>img{margin:4px;width:36px;float: left;}
-#addbook-upload>div{width: calc(100% - 50px);text-overflow: ellipsis;text-align: right;}
+#addbook-upload>img{margin:4px;height:100%;float: left;}
+#addbook-upload>div{text-overflow: ellipsis;text-align: right;}
 .addbook-btn{padding:10px 0;text-align:right;border-top:1px solid #E9E7E7;}
 .addbook-btn a{padding:8px 15px;color:#3399CC;line-height:36px;}
 .addbook-btn a:active,#addbook-upload:active{background:#eee;}
@@ -677,31 +674,24 @@ body,html {
 /* 精选 - 今日高分推荐 */
 .video-list {
     position: relative;
-    overflow: hidden;
-    display: block;
-    margin: 0;
-    padding: 0;
     top: 9px;
+    margin: 0 -20px;
 }
 .video-preview {
     position: relative;
+    padding: 0 20px;
 }
 .video-title {
-    font-family: PingFang-SC-Heavy;
     font-size: 12px;
-    color: #fff;
     height: 17px;
     line-height: 17px;
     text-overflow: ellipsis;
     white-space: nowrap;
-    overflow: hidden;
 }
 .video-time {
     margin-top: 1px;
     opacity: 0.5;
-    font-family: GoogleSans-Bold;
     font-size: 8px;
-    color: #fff;
     height: 10px;
     line-height: 10px;
 }
@@ -712,7 +702,6 @@ body,html {
     background: rgba(0,0,0,0.3);
     background-size: cover;
     border-radius: 6px;
-    position: relative;
 }
 
 /* 精选 - 今日份壁纸 */
@@ -739,10 +728,7 @@ body,html {
 
 /* 精选 - 知乎热榜 */
 .audio-list{
-    width: 100%;
     margin-top: 24px;
-    overflow: hidden;
-    position: relative;
     height: 50px;
 }
 .audio-list .audio-item{
@@ -753,7 +739,7 @@ body,html {
 .audio-list .audio-item-icon{
     width: 16px;
     height: 16px;
-    background-image: url(https://sm01.alicdn.com/L1/272/6837/static/wap/img/ball.png);
+    background-image: url(https://gw.alicdn.com/L1/272/6837/static/wap/img/ball.png);
     background-size: cover;
     background-repeat: no-repeat;
     margin-right: 10px;
@@ -774,9 +760,7 @@ body,html {
 }
 .audio-list .audio-item-title{
     font-size: 12px;
-    color: #fff;
     flex: 1;
-    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     margin-right: 10px;
@@ -821,5 +805,5 @@ body,html {
 }
 /* 书签排序幽灵方块 */
 .ghost{
-    opacity: .1;
+    opacity: .1 !important;
 }
