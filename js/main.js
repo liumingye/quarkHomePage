@@ -1,5 +1,5 @@
 require.config({
-	urlArgs: "v=1.49.158459",
+	urlArgs: "v=1.49.158460",
 	baseUrl: "js/lib"
 });
 
@@ -150,12 +150,44 @@ require(['jquery'], function ($) {
 
 	/**
 	 * 文件打开函数
-	 * @function callback 回调函数
+	 * @param callback 回调函数
 	 */
 	var openFile = function (callback) {
 		var input = $('<input type="file">');
 		input.on("input propertychange", callback);
 		input.click();
+	}
+
+	/**
+	 * 文件上传函数
+	 * @param file 文件
+	 * @param callback 回调函数 
+	 */
+	var uploadFile = function (file, callback) {
+		var imageData = new FormData();
+		imageData.append("file", file);
+		$.ajax({
+			url: 'https://apis.yum6.cn/api/5bd90750c3f77?token=f07b711396f9a05bc7129c4507fb65c5',
+			type: 'POST',
+			data: imageData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			dataType: 'json',
+			success: function (res) {
+				if (res.code == 1) {
+					callback.success && callback.success('https://ps.ssl.qhmsg.com' + res.data.substr(res.data.lastIndexOf("/")));
+				} else {
+					callback.error && callback.error(res.msg);
+				}
+			},
+			error: function () {
+				callback.error && callback.error('请求失败！');
+			},
+			complete: function () {
+				callback.complete && callback.complete();
+			}
+		});
 	}
 
 	/**
@@ -246,34 +278,20 @@ require(['jquery'], function ($) {
 						$("#addbook-upload").click(function () {
 							openFile(function () {
 								var file = this.files[0];
-								var imageData = new FormData();
-								imageData.append("file", 'multipart');
-								imageData.append("Filedata", file);
 								$("#addbook-upload").html('上传图标中...').css("pointer-events", "none");
 								$(".addbook-ok").css("pointer-events", "none");
-								$.ajax({
-									url: 'https://api.uomg.com/api/image.360',
-									type: 'POST',
-									data: imageData,
-									cache: false,
-									contentType: false,
-									processData: false,
-									dataType: 'json',
-									success: function (result) {
-										if (result.code == 1) {
-											$("#addbook-upload").html('<img src="' + result.imgurl + '"></img><div>' + file.name + '</div>');
-										} else {
-											$("#addbook-upload").html('上传图标失败请重试！');
-										}
+								uploadFile(file, {
+									success: function (url) {
+										$("#addbook-upload").html('<img src="' + url + '"></img><div>' + file.name + '</div>');
 									},
-									error: function () {
-										$("#addbook-upload").html('上传图标错误请重试！');
+									error: function (msg) {
+										$("#addbook-upload").html('上传图标失败！' + msg);
 									},
-									complete:function(){
+									complete: function () {
 										$("#addbook-upload").css("pointer-events", "");
 										$(".addbook-ok").css("pointer-events", "");
 									}
-								});
+								})
 							});
 						});
 						$(".addbook-ok").click(function () {
@@ -288,7 +306,7 @@ require(['jquery'], function ($) {
 									canvas.width = 100;
 									var ctx = canvas.getContext("2d");
 									ctx.fillStyle = "#f5f5f5";
-									ctx.fillRect(0,0,100,100);
+									ctx.fillRect(0, 0, 100, 100);
 									ctx.fill();
 									ctx.fillStyle = "#222";
 									ctx.font = "40px Arial";
@@ -878,24 +896,27 @@ require(['jquery'], function ($) {
 						<p class="set-title">搜索引擎</p>
 					</div>
 					<select class="set-select">
-						<option value="quark">夸克</option>
+						<option value="quark">夸克搜索</option>
 						<option value="via" style="display:none">跟随Via浏览器</option>
-						<option value="baidu">百度</option>
-						<option value="google">谷歌</option>
-						<option value="bing">必应</option>
-						<option value="sm">神马</option>
-						<option value="haosou">好搜</option>
-						<option value="sogou">搜狗</option>
+						<option value="baidu">百度搜索</option>
+						<option value="google">谷歌搜索</option>
+						<option value="bing">必应搜索</option>
+						<option value="sm">神马搜索</option>
+						<option value="haosou">360搜索</option>
+						<option value="sogou">搜狗搜索</option>
 						<option value="diy">自定义</option>
 					</select>
 				</li>
 				<li class="set-option" data-value="wallpaper">
 					<div class="set-text">
-						<p class="set-title">壁纸</p>
+						<p class="set-title">设置壁纸</p>
 					</div>
 				</li>
 				<li class="set-option" data-value="logo">
-					<p class="set-title">LOGO</p>
+					<p class="set-title">设置LOGO</p>
+				</li>
+				<li class="set-option" data-value="delLogo">
+					<p class="set-title">恢复默认壁纸和LOGO</p>
 				</li>
 				<li class="set-option" data-value="bookcolor">
 					<div class="set-text">
@@ -917,9 +938,6 @@ require(['jquery'], function ($) {
 						<p class="set-title">记录搜索历史</p>
 					</div>
 					<input type="checkbox" value="0" class="set-checkbox" autocomplete="off">
-				</li>
-				<li class="set-option" data-value="delLogo">
-					<p class="set-title">恢复默认壁纸和LOGO</p>
 				</li>
 				<li class="set-option" data-value="export">
 					<div class="set-text">
@@ -946,7 +964,7 @@ require(['jquery'], function ($) {
 				<li class="set-option">
 					<div class="set-text">
 						<p class="set-title">关于</p>
-						<p class="set-description">当前版本：1.49.158459<br>作者：BigLop</p>
+						<p class="set-description">当前版本：1.49.158460<br>作者：BigLop</p>
 					</div>
 				</li>
 			</ul>
@@ -987,13 +1005,23 @@ require(['jquery'], function ($) {
 			if (value === "wallpaper") {
 				openFile(function () {
 					var file = this.files[0];
-					var reader = new FileReader();
-					reader.onload = function () {
-						Storage.setData.wallpaper = this.result;
-						store.set("setData", Storage.setData);
-						$("body").css("background-image", "url(" + Storage.setData.wallpaper + ")");
-					};
-					reader.readAsDataURL(file);
+					$this.css("pointer-events", "none");
+					$this.find('.set-title').text('壁纸上传中..');
+					uploadFile(file, {
+						success: function (url) {
+							Storage.setData.wallpaper = url;
+							store.set("setData", Storage.setData);
+							$("body").css("background-image", "url(" + Storage.setData.wallpaper + ")");
+							alert('壁纸上传成功！');
+						},
+						error: function (msg) {
+							alert('壁纸上传失败！' + msg);
+						},
+						complete: function () {
+							$this.find('.set-title').text('壁纸');
+							$this.css("pointer-events", "");
+						}
+					});
 				});
 			} else if (value === "logo") {
 				openFile(function () {
