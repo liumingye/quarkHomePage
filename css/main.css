@@ -216,7 +216,7 @@ body,html {
     position: absolute;
     top: -40px;
     background-color: #f5f5f5;
-    border-radius: 50%;
+    border-radius: 999px;
     padding: 8px 0 8px 30px;
     transition: .3s;
 }
@@ -235,7 +235,7 @@ body,html {
     padding: 8px 14px;
     margin: 10px 6px;
     background: #eee;
-    border-radius: 50%;
+    border-radius: 999px;
     color:var(--dark);
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -275,7 +275,7 @@ body,html {
     font-size:14px;
     margin: 10px;
     background-color: #f9f9f9;
-    border-radius: 50%;
+    border-radius: 999px;
     opacity: 0;
     transition: opacity .3s;
     will-change: opacity;
@@ -344,7 +344,7 @@ body,html {
 }
 .shortcut3 li:not(:first-child){
     background-color: #fff;
-    border-radius: 50%;
+    border-radius: 999px;
     margin: 9px 4px;
 }
 
