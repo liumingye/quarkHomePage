@@ -200,7 +200,7 @@ require(['jquery'], function ($) {
 	var bookMarkFn = function (ele, options) {
 		this.$ele = $(ele);
 		this.options = {
-			data: [{ "name": "精选", "url": "choice()", "icon": "icon/discover.png" }, { "name": "微博", "url": "https://weibo.com", "icon": "icon/weibo.png" }, { "name": "Bilibili", "url": "https://m.bilibili.com", "icon": "icon/bilibilibog.png" }, { "name": "知乎", "url": "https://www.zhihu.com", "icon": "icon/zhihu.png" }, { "name": "淘宝", "url": "https://m.taobao.com", "icon": "icon/taobao.png" }, { "name": "贴吧", "url": "https://tieba.baidu.com", "icon": "icon/tieba.png" }, { "name": "IT之家", "url": "https://m.ithome.com", "icon": "icon/ithome.png" }, { "name": "网易", "url": "https://3g.163.com", "icon": "icon/netease.png" }],
+			data: [{ "name": "精选", "url": "choice()", "icon": "icon/discover.png" }, { "name": "微博", "url": "https://weibo.com", "icon": "icon/weibo.png" }, { "name": "Bilibili", "url": "https://m.bilibili.com", "icon": "icon/bilibilibog.png" }, { "name": "知乎", "url": "https://www.zhihu.com", "icon": "icon/zhihu.png" }, { "name": "淘宝", "url": "https://m.taobao.com", "icon": "icon/taobao.png" }, { "name": "贴吧", "url": "https://tieba.baidu.com", "icon": "icon/tieba.png" }, { "name": "IT之家", "url": "https://m.ithome.com", "icon": "icon/ithome.png" }, { "name": "网易", "url": "https://3g.163.com", "icon": "icon/netease.png" }, { "name": "今日热榜", "url": "https://tophub.today", "icon": "icon/tophub.png" }],
 		};
 		this.options = $.extend({}, this.options, options);
 		this.init();
@@ -491,7 +491,7 @@ require(['jquery'], function ($) {
 		anitInput.attr('class', 'anitInput').css({
 			'position': 'absolute',
 			'top': top,
-			'left': ornamentInput.position().left,
+			'left': ornamentInput.offset().left,
 			'width': ornamentInput.outerWidth(),
 			'height': ornamentInput.outerHeight(),
 			'pointer-events': 'none',
@@ -552,7 +552,7 @@ require(['jquery'], function ($) {
 				'top': ornamentInput.position().top,
 				'height': ornamentInput.outerHeight(),
 				'min-height': ornamentInput.outerHeight(),
-				'left': ornamentInput.position().left,
+				'left': ornamentInput.offset().left,
 				'width': ornamentInput.outerWidth(),
 				'transition': '.3s'
 			});
@@ -691,7 +691,9 @@ require(['jquery'], function ($) {
 		if ($(".search-btn").text() === "进入") {
 			!text.match(/^(ht|f)tp(s?):\/\//) && (text = "http://" + text);
 			history.go(-1);
-			location.href = text;
+			setTimeout(function () {
+				location.href = text;
+			}, 1);
 		} else {
 			if (!text) {
 				$(".search-input").blur();
@@ -1175,7 +1177,7 @@ require(['jquery'], function ($) {
 					if (distance >= 100 && direction === "down") {
 						$('.ornament-input-group').click();
 						setTimeout(function () {
-							$('.ornament-input-group').css("transform","");
+							$('.ornament-input-group').css("transform", "");
 						}, 300);
 					}
 				}
