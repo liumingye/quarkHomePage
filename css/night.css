@@ -10,6 +10,7 @@ body {
 	background: #1f2120;
 }
 .bookmark .list {
+	-webkit-filter: brightness(60%);
 	filter: brightness(60%);
 }
 .bookmark .addbook .img svg {
@@ -44,10 +45,12 @@ body {
 	background:#1f1f1f;
 }
 .emptyHistory{
+	-webkit-filter: invert(100%) brightness(60%);
 	filter: invert(100%) brightness(60%);
 	background-color:#ccc;
 }
 .suggestion li {
+	-webkit-filter: invert(100%) brightness(60%);
 	filter: invert(100%) brightness(60%);
 }
 .suggestion li:active{
@@ -55,6 +58,7 @@ body {
 }
 .shortcut3 li:not(:first-child),
 .empty-input {
+	-webkit-filter: brightness(60%);
 	filter: brightness(60%);
 }
 .theme-white .bookmark .list .text {
@@ -86,6 +90,7 @@ body {
     color: #545454;
 }
 .choice-close{
+	-webkit-filter: invert(85%);
 	filter: invert(85%);
 	border-radius: 0 0 9px 9px;
 }
@@ -93,8 +98,14 @@ body {
     background: linear-gradient(to right bottom,#2c2c22,#272727);
 }
 .choice-cut .list{
+	-webkit-filter: brightness(60%);
+	filter: brightness(60%);
+}
+.choice-li img{
+	-webkit-filter: brightness(60%);
 	filter: brightness(60%);
 }
 .logo{
-    filter: brightness(60%);
+	-webkit-filter: brightness(60%);
+	filter: brightness(60%);
 }
