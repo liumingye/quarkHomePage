@@ -230,6 +230,7 @@ body,html {
 .emptyHistory:after{
     content: "全部删除";
     white-space: pre;
+    font-size: 12px;
 }
 .history .content{
     display: flex;
