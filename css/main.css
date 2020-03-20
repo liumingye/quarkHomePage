@@ -157,7 +157,7 @@ body,html {
 /**
  * 浅色图标
 */
-.theme-white .ornament-input-group{
+.theme-white .ornament-input-group,.theme-white .anitInput{
     border-color:var(--white);
 }
 .theme-white .bookmark .list .text{
