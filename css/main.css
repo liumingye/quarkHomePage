@@ -19,7 +19,7 @@ ul,li{list-style-type:none}
 body {
     font-size: 14px;
     background: var(--bg);
-    background-size: cover;
+    background-size: 100%;
     background-position: top center;
     background-repeat: no-repeat;
     background-attachment: fixed;
