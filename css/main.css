@@ -88,7 +88,6 @@ body,html {
 	height: 50px;
 	border-radius: 999px;
 	margin-bottom: 20px;
-    transition: .3s;
 }
 .ornament-input-group.animation, .anitInput.animation {
     opacity:0;
