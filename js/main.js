@@ -1053,7 +1053,7 @@ require(['jquery'], function ($) {
 				openFile(function () {
 					var file = this.files[0];
 					$this.css("pointer-events", "none");
-					$this.find('.set-title').text('壁纸上传中..');
+					$this.find('.set-title').text('壁纸上传中...');
 					uploadFile(file, {
 						success: function (url) {
 							Storage.setData.wallpaper = url;
@@ -1062,7 +1062,7 @@ require(['jquery'], function ($) {
 							alert('壁纸上传成功！');
 						},
 						error: function (msg) {
-							alert('壁纸上传失败！' + msg);
+							alert('壁纸上传失败，请重试！错误信息：' + msg);
 						},
 						complete: function () {
 							$this.find('.set-title').text('壁纸');
