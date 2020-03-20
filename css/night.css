@@ -24,9 +24,11 @@ body {
 .input-bg {
 	background: #282828;
 }
+.bottom-row{
+	border-color: #3f3f3f;
+}
 .search-from {
 	background: #252726;
-	border-color: #3f3f3f;
 }
 .search-input::-webkit-input-placeholder {
 	color: #555;
