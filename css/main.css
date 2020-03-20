@@ -5,7 +5,9 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:b
  * 仿夸克主页
  * author: BigLop
 */
-*{overflow:hidden;margin:0;padding:0;outline:0;user-select:none;-webkit-tap-highlight-color:transparent;
+*{
+    overflow:hidden;
+    margin:0;padding:0;outline:0;user-select:none;-webkit-tap-highlight-color:transparent;
     font-family: "Noto Sans CJK SC", "Source Han Sans CN", sans-serif !important;
 }
 :after, :before, * {
@@ -83,7 +85,7 @@ body,html {
 }
 .ornament-input-group, .anitInput {
 	border: 1.2px solid var(--dark);
-	min-height: 50px;
+	height: 50px;
 	border-radius: 999px;
 	margin-bottom: 20px;
     transition: .3s;
@@ -191,6 +193,7 @@ body,html {
     bottom: 0;
     width: 100%;
     background: #fff;
+    overflow: visible;
 }
 .suggestion,.history{overflow:auto;width:100%;
     max-height: calc(100% - 99px);
@@ -267,6 +270,7 @@ body,html {
     border-top:.5px solid #eee;
     display: flex;
     height: 55px;
+    overflow: visible;
 }
 .s-temp{position:fixed;top:-8pc;}
 .input-bg{
@@ -775,7 +779,7 @@ body,html {
 @keyframes fadeOut{0%{opacity:1;}
 100%{opacity:0;}
 }
-@keyframes down{0%{transform:translateY(-60px);}
+@keyframes down{0%{transform:translateY(-80px);}
 100%{transform:translateY(0);}
 }
 @keyframes down2{0%{opacity:1;transform:translateY(0);}

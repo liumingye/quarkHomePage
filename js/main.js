@@ -60,7 +60,7 @@ require(['jquery'], function ($) {
 		 * 初始化存储内容
 		 */
 		initSetData: function () {
-			Storage.setData = { engines: "quark", bookcolor: "black", searchHistory: "1" };
+			Storage.setData = { engines: "quark", bookcolor: "black", searchHistory: true };
 			store.set("setData", Storage.setData);
 		},
 		/**
@@ -486,32 +486,32 @@ require(['jquery'], function ($) {
 		$('body').css("pointer-events", "none");
 		history.pushState(null, document.title, changeParam("page", "search"));
 		// 动画输入框复合
-		var top = $(".ornament-input-group").position().top;
-		$('.anitInput').remove()
+		$('.anitInput').remove();
 		var ornamentInput = $(".ornament-input-group");
+		var top = ornamentInput.offset().top;
+		var left = ornamentInput.offset().left;
 		var anitInput = ornamentInput.clone();
 		anitInput.attr('class', 'anitInput').css({
 			'position': 'absolute',
 			'top': top,
-			'left': ornamentInput.offset().left,
+			'left': left,
 			'width': ornamentInput.outerWidth(),
 			'height': ornamentInput.outerHeight(),
-			'pointer-events': 'none',
-			'transform': ''
+			'pointer-events': 'none'
 		})
-		$('.ornament-input-group').css('opacity', 0);
 		$('body').append(anitInput);
+		ornamentInput.css('opacity', 0);
 		if ($(window).data('anitInputFn')) {
 			$(window).unbind('resize', $(window).data('anitInputFn'));
 		}
 		var anitInputFn = function () {
 			var inputBg = $('.input-bg');
+			var scaleX = inputBg.outerWidth() / ornamentInput.outerWidth();
+			var scaleY = inputBg.outerHeight() / ornamentInput.outerHeight();
+			var translateX = inputBg.offset().left - left - (ornamentInput.outerWidth() - inputBg.outerWidth()) / 2;
+			var translateY = inputBg.offset().top - top - (ornamentInput.outerHeight() - inputBg.outerHeight()) / 2;
 			anitInput.css({
-				'transform': 'translateY(' + (inputBg.offset().top - top) + 'px) translate3d(0,0,0)',
-				'height': inputBg.outerHeight(),
-				'min-height': inputBg.outerHeight(),
-				'left': inputBg.offset().left,
-				'width': inputBg.outerWidth(),
+				'transform': 'translateX(' + translateX + 'px) translateY(' + translateY + 'px) scale(' + scaleX + ',' + scaleY + ') translate3d(0,0,0)',
 				'transition': '.3s'
 			});
 			anitInput.addClass("animation");
@@ -553,14 +553,8 @@ require(['jquery'], function ($) {
 			// 动画输入框分离
 			$(window).unbind('resize', $(window).data('anitInputFn'));
 			var anitInput = $('.anitInput');
-			var ornamentInput = $('.ornament-input-group');
 			anitInput.css({
 				'transform': '',
-				'top': ornamentInput.position().top,
-				'height': ornamentInput.outerHeight(),
-				'min-height': ornamentInput.outerHeight(),
-				'left': ornamentInput.offset().left,
-				'width': ornamentInput.outerWidth(),
 				'transition': '.3s'
 			});
 			anitInput.removeClass("animation");
@@ -577,7 +571,7 @@ require(['jquery'], function ($) {
 				}
 				$(".page-search").off('transitionend');
 				$(".page-search").hide();
-				ornamentInput.css({ 'transition': 'none', 'opacity': '' });
+				$('.ornament-input-group').css({ 'transition': 'none', 'opacity': '' });
 				anitInput.remove();
 				// 搜索页内容初始化
 				$(".suggestion").html("");
@@ -1182,13 +1176,12 @@ require(['jquery'], function ($) {
 					$('.logo').removeAttr("disabled style");
 					$('.bookmark').removeAttr("disabled style");
 					if (distance >= 100 && direction === "down") {
-						$('.ornament-input-group').click();
+						$('.ornament-input-group').css("transform", "").click();
 						$('.logo').css('opacity', '0');
 						$('.bookmark').css('opacity', '0');
-						$('.anitInput').addClass('animation')
+						$('.anitInput').addClass('animation');
 						setTimeout(function () {
 							$('.logo').css('opacity', '');
-							$('.ornament-input-group').css("transform", "");
 							$('.bookmark').css('opacity', '');
 						}, 300);
 					} else {
