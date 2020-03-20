@@ -268,7 +268,7 @@ body,html {
     display: flex;
     height: 55px;
 }
-.s-temp{position:fixed;top:-8pc;user-select:text;}
+.s-temp{position:fixed;top:-8pc;}
 .input-bg{
     display: flex;
     flex:1;
@@ -292,7 +292,6 @@ body,html {
     animation: down .3s;
     caret-color: #2196F3;
     color: var(--dark);
-    user-select: text;
 }
 
 .empty-input{display:none;width:50px;height:34px;background:url(../img/delete.png) no-repeat center;background-size:16px;

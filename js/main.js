@@ -1,5 +1,5 @@
 require.config({
-	urlArgs: "v=1.49.158463",
+	urlArgs: "v=1.49.158467",
 	baseUrl: "js/lib"
 });
 
@@ -153,9 +153,12 @@ require(['jquery'], function ($) {
 	 * @param callback 回调函数
 	 */
 	var openFile = function (callback) {
-		var input = $('<input type="file">');
-		input.on("input propertychange change", callback);
-		input.click();
+		if($('.openFile').length===0){
+			var input = $('<input class="openFile" type="file">');
+			input.on("propertychange change", callback);
+			$('body').append(input);
+		}
+		$('.openFile').click();
 	}
 
 	/**
@@ -499,7 +502,10 @@ require(['jquery'], function ($) {
 		})
 		$('.ornament-input-group').css('opacity', 0);
 		$('body').append(anitInput);
-		$(window).unbind('resize').resize(function () {
+		if ($(window).data('anitInputFn')) {
+			$(window).unbind('resize', $(window).data('anitInputFn'));
+		}
+		var anitInputFn = function () {
 			var inputBg = $('.input-bg');
 			anitInput.css({
 				'transform': 'translateY(' + (inputBg.offset().top - top) + 'px) translate3d(0,0,0)',
@@ -510,7 +516,9 @@ require(['jquery'], function ($) {
 				'transition': '.3s'
 			});
 			anitInput.addClass("animation");
-		});
+		}
+		$(window).data('anitInputFn', anitInputFn);
+		$(window).bind('resize', anitInputFn);
 		// 弹出软键盘
 		$(".s-temp").focus();
 		// 书签动画
@@ -523,9 +531,9 @@ require(['jquery'], function ($) {
 					return;
 				}
 				$(".page-search").off('transitionend');
-				$(".search-input").focus();
 				$('body').css("pointer-events", "");
 			}).addClass("animation");
+			$(".search-input").focus();
 			$(".history").show().addClass("animation");
 			$(".input-bg").addClass("animation");
 			$(".shortcut").addClass("animation");
@@ -544,7 +552,7 @@ require(['jquery'], function ($) {
 			$('body').css("pointer-events", "none");
 			history.replaceState(null, document.title, location.origin + location.pathname);
 			// 动画输入框分离
-			$(window).unbind('resize');
+			$(window).unbind('resize', $(window).data('anitInputFn'));
 			var anitInput = $('.anitInput');
 			var ornamentInput = $('.ornament-input-group');
 			anitInput.css({
@@ -1010,7 +1018,7 @@ require(['jquery'], function ($) {
 				<li class="set-option">
 					<div class="set-text">
 						<p class="set-title">关于</p>
-						<p class="set-description">当前版本：1.49.158463<br>作者：BigLop</p>
+						<p class="set-description">当前版本：1.49.158467<br>作者：BigLop</p>
 					</div>
 				</li>
 			</ul>
@@ -1176,9 +1184,16 @@ require(['jquery'], function ($) {
 					$('.bookmark').removeAttr("disabled style");
 					if (distance >= 100 && direction === "down") {
 						$('.ornament-input-group').click();
+						$('.logo').css('opacity','0');
+						$('.bookmark').css('opacity','0');
+						$('.anitInput').addClass('animation')
 						setTimeout(function () {
+							$('.logo').css('opacity','');
 							$('.ornament-input-group').css("transform", "");
+							$('.bookmark').css('opacity','');
 						}, 300);
+					} else {
+						$('.ornament-input-group').removeAttr("style");
 					}
 				}
 			}
