@@ -153,12 +153,11 @@ require(['jquery'], function ($) {
 	 * @param callback 回调函数
 	 */
 	var openFile = function (callback) {
-		if($('.openFile').length===0){
-			var input = $('<input class="openFile" type="file">');
-			input.on("propertychange change", callback);
-			$('body').append(input);
-		}
-		$('.openFile').click();
+		$('.openFile').remove();
+		var input = $('<input class="openFile" type="file">');
+		input.on("propertychange change", callback);
+		$('body').append(input);
+		input.click();
 	}
 
 	/**
@@ -1184,13 +1183,13 @@ require(['jquery'], function ($) {
 					$('.bookmark').removeAttr("disabled style");
 					if (distance >= 100 && direction === "down") {
 						$('.ornament-input-group').click();
-						$('.logo').css('opacity','0');
-						$('.bookmark').css('opacity','0');
+						$('.logo').css('opacity', '0');
+						$('.bookmark').css('opacity', '0');
 						$('.anitInput').addClass('animation')
 						setTimeout(function () {
-							$('.logo').css('opacity','');
+							$('.logo').css('opacity', '');
 							$('.ornament-input-group').css("transform", "");
-							$('.bookmark').css('opacity','');
+							$('.bookmark').css('opacity', '');
 						}, 300);
 					} else {
 						$('.ornament-input-group').removeAttr("style");

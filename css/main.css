@@ -171,7 +171,7 @@ body,html {
 .addbook-input{padding:12px 0;width:100%;border:0;border-bottom:1px solid #E9E7E7;color:var(--dark);background:var(--bg);}
 .addbook-input:hover{border-bottom:1px solid #0066CC;}
 #addbook-upload{height: 44px;line-height: 44px;text-align:center;margin:5px 0;}
-#addbook-upload>img{margin:4px;height:100%;float: left;}
+#addbook-upload>img{height:100%;float: left;}
 #addbook-upload>div{text-overflow: ellipsis;text-align: right;}
 .addbook-btn{padding:10px 0;text-align:right;border-top:1px solid #E9E7E7;}
 .addbook-btn a{padding:8px 15px;color:#3399CC;line-height:36px;}
