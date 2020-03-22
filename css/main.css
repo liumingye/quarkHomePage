@@ -165,7 +165,7 @@ body,html {
 	text-shadow: 0 0 4px var(--dark);
 }
 /* 背景页面 */
-.addbook-shade,.page-search,.set-from{position:absolute;left:0;top:0;width:100%;height:100%;background:var(--bg);}
+.addbook-shade,.page-search,.page-settings{position:absolute;left:0;top:0;width:100%;height:100%;background:var(--bg);}
 .addbook-shade{background:rgba(0,0,0,0.5);}
 /* 添加书签 */
 .addbook-from{bottom: 0;background: #fff;position: absolute;animation:up .2s;padding:0 20px;width:100%;background:var(--bg);color:var(--dark)}
@@ -355,13 +355,13 @@ body,html {
 }
 
 /* 设置页面 */
-.set-from{
+.page-settings{
 	opacity: 0;
 	transform:  translate3d(0, 60px, 0);
 	transition: transform .3s,opacity .3s;
 	color:var(--dark);
 }
-.set-from.animation{
+.page-settings.animation{
 	opacity: 1;
 	transform:  translate3d(0, 0, 0);
 }
@@ -413,33 +413,33 @@ body,html {
 .set-option .set-checkbox + label::before, .set-option .set-checkbox + label::after {
 	content: "";
 	position: absolute;
-	transition: 150ms cubic-bezier(0.24, 0, 0.5, 1);
 	transform: translateY(-50%);
 	top: 50%;
 	right: 20px;
+	border-radius: 999px;
+}
+.set-option .set-checkbox + label::before {
+	background: rgba(214, 214, 214, 0.434);
+	height: 24px;
+	width: 40px;
+	transition: .15s cubic-bezier(0.24, 0, 0.5, 1);
 }
 .set-option .set-checkbox:checked + label:before {
 	background: #193ee8;
-	transition: right .3s cubic-bezier(.18,.89,.35,1.15);
-}
-.set-option .set-checkbox + label::before {
-	height: 24px;
-	width: 40px;
-	border-radius: 999px;
-	background: rgba(214, 214, 214, 0.434);
 }
 .set-option .set-checkbox + label::after {
-	height: 18px;
-	width: 18px;
-	border-radius: 50%;
-	right: 38px;
 	background: #fff;
+	height: 19px;
+	width: 19px;
+	right: 38px;
+	transition: right .3s cubic-bezier(.18,.89,.35,1.15);
 }
 .set-option .set-checkbox:checked + label:after {
-	right: 24px;
+	right: 23px;
 }
-
-.set-option:active{background:#eee}
+.set-option:active{
+	background:#eee
+}
 .set-text{
 	flex:1;
 }

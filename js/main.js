@@ -1,5 +1,6 @@
+const version = '1.49.158489';
 require.config({
-	urlArgs: "v=1.49.158488",
+	urlArgs: `v=${version}`,
 	baseUrl: "js/lib"
 });
 
@@ -925,111 +926,55 @@ require(['jquery'], function ($) {
 			location.href = "x:bm?sort=default";
 		}
 	}).longPress(() => {
-		$('#app').append(`<div class="set-from">
-			<div class="set-header">
-				<div class="set-back"></div>
-				<p class="set-logo">主页设置</p>
-			</div>
-			<ul class="set-option-from">
-				<li class="set-option" data-value="engines">
-					<div class="set-text">
-						<p class="set-title">搜索引擎</p>
-					</div>
-					<select class="set-select">
-						<option value="quark">夸克搜索</option>
-						<option value="via" style="display:none">跟随Via浏览器</option>
-						<option value="baidu">百度搜索</option>
-						<option value="google">谷歌搜索</option>
-						<option value="bing">必应搜索</option>
-						<option value="sm">神马搜索</option>
-						<option value="haosou">360搜索</option>
-						<option value="sogou">搜狗搜索</option>
-						<option value="diy">自定义</option>
-					</select>
-				</li>
-				<li class="set-option" data-value="wallpaper">
-					<div class="set-text">
-						<p class="set-title">设置壁纸</p>
-					</div>
-				</li>
-				<li class="set-option" data-value="logo">
-					<p class="set-title">设置LOGO</p>
-				</li>
-				<li class="set-option" data-value="delLogo">
-					<p class="set-title">恢复默认壁纸和LOGO</p>
-				</li>
-				<li class="set-option" data-value="bookcolor">
-					<div class="set-text">
-						<p class="set-title">图标颜色</p>
-					</div>
-					<select class="set-select">
-						<option value="black">深色图标</option>
-						<option value="white">浅色图标</option>
-					</select>
-				</li>
-				<li class="set-option" data-value="nightMode">
-					<div class="set-text">
-						<p class="set-title">夜间模式</p>
-					</div>
-					<input type="checkbox" value="0" class="set-checkbox" autocomplete="off">
-					<label></label>
-				</li>
-				<li class="set-option" data-value="searchHistory">
-					<div class="set-text">
-						<p class="set-title">记录搜索历史</p>
-					</div>
-					<input type="checkbox" value="0" class="set-checkbox" autocomplete="off">
-					<label></label>
-				</li>
-				<li class="set-hr"></li>
-				<li class="set-option" data-value="export">
-					<div class="set-text">
-						<p class="set-title">导出主页数据</p>
-					</div>
-				</li>
-				<li class="set-option" data-value="import">
-					<div class="set-text">
-						<p class="set-title">导入主页数据</p>
-					</div>
-				</li>
-				<li class="set-hr"></li>
-				<li class="set-option" data-value="openurl">
-					<div class="set-text">
-						<p class="set-title">Github</p>
-						<p class="set-description">https://github.com/liumingye/quarkHomePage</p>
-					</div>
-				</li>
-				<li class="set-option">
-					<div class="set-text">
-						<p class="set-title">关于</p>
-						<p class="set-description">当前版本：1.49.158488<br>作者：BigLop</p>
-					</div>
-				</li>
-			</ul>
-		</div>`);
+		var data = [{ "title": "搜索引擎", "type": "select", "value": "engines", "data": [{ "t": "夸克搜索", "v": "quark" }, { "t": "跟随Via浏览器", "v": "via" }, { "t": "百度搜索", "v": "baidu" }, { "t": "谷歌搜索", "v": "google" }, { "t": "必应搜索", "v": "bing" }, { "t": "神马搜索", "v": "sm" }, { "t": "好搜搜索", "v": "haosou" }, { "t": "搜狗搜索", "v": "sogou" }, { "t": "自定义", "v": "diy" }] }, { "title": "设置壁纸", "value": "wallpaper" }, { "title": "设置LOGO", "value": "logo" }, { "title": "恢复默认壁纸和LOGO", "value": "delLogo" }, { "title": "图标颜色", "type": "select", "value": "bookcolor", "data": [{ "t": "深色图标", "v": "black" }, { "t": "浅色图标", "v": "white" }] }, { "title": "夜间模式", "type": "checkbox", "value": "nightMode" }, { "title": "记录搜索历史", "type": "checkbox", "value": "searchHistory" }, { "type": "hr" }, { "title": "导出主页数据", "value": "export" }, { "title": "导入主页数据", "value": "import" }, { "type": "hr" }, { "title": "Github", "value": "openurl", "description": "https://github.com/liumingye/quarkHomePage" }, { "title": "关于", "description": "当前版本：" + version + "<br>作者：BigLop" }];
+		var html = '<div class="page-settings"><div class="set-header"><div class="set-back"></div><p class="set-logo">主页设置</p></div><ul class="set-option-from">';
+		for (var json of data) {
+			if (json.type === 'hr') {
+				html += `<li class="set-hr"></li>`;
+			} else {
+				html += `<li class="set-option" ${json.value ? `data-value="${json.value}"` : ''}>
+							<div class="set-text">
+								<p class="set-title">${json.title}</p>
+								${json.description ? `<div class="set-description">${json.description}</div>` : ''}
+							</div>`;
+				if (json.type === 'select') {
+					html += `<select class="set-select">`;
+					for(var i of json.data){
+						html += `<option value="${i.v}">${i.t}</option>`;
+					}
+					html += `</select>`;
+				} else if (json.type === 'checkbox') {
+					html += `<input type="checkbox" class="set-checkbox" autocomplete="off"><label></label>`;
+				}
+				html += `</li>`;
+			}
+		}
+		html += '</ul></div>';
+		$('#app').append(html);
 
-		$(".set-from").show();
-		$(".set-from").addClass('animation');
+		$(".page-settings").show();
+		$(".page-settings").addClass('animation');
 
 		var browser = browserInfo();
-		if (browser === 'via') { // 只有VIA浏览器才能显示
-			$('option[value=via]').show();
+		if (browser !== 'via') { // 只有VIA浏览器才能显示
+			$('option[value=via]').hide();
 		}
 
 		$(".set-option .set-select").map(function () {
 			$(this).val(settings.get($(this).parent().data('value')));
 		});
+
 		$(".set-option .set-checkbox").map(function () {
 			$(this).prop("checked", settings.get($(this).parent().data('value')));
 		});
 
 		$(".set-back").click(function () {
-			$(".set-from").css("pointer-events", "none").removeClass("animation");
-			$(".set-from").on('transitionend', function (evt) {
+			$(".page-settings").css("pointer-events", "none").removeClass("animation");
+			$(".page-settings").on('transitionend', function (evt) {
 				if (evt.target !== this) {
 					return;
 				}
-				$(".set-from").remove();
+				$(".page-settings").remove();
 			});
 		});
 
