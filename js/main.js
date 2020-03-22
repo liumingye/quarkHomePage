@@ -219,7 +219,7 @@ require(['jquery'], function ($) {
 			var data = this.options.data;
 			// 绑定书签长按事件
 			this.$ele.longPress(function () {
-				if (that.status !== "editing") {
+				if (that.status !== "editing" && data.length > 0) {
 					that.status = "editing";
 					$('.addbook').remove();
 					require(['jquery-sortable'], function () {
