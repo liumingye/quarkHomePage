@@ -2,7 +2,7 @@
  * 夜间模式
 */
 :root {
-    --bg: #282828;
+	--bg: #282828;
 	--white: #888;
 	--dark: #888;
 }
@@ -24,7 +24,7 @@ body {
 .input-bg {
 	background: #282828;
 }
-.bottom-row{
+.bottom-row {
 	border-color: #3f3f3f;
 }
 .search-from {
@@ -40,22 +40,22 @@ body {
 	color: #666;
 }
 .shortcut .shortcut1 li:active,
-.shortcut .shortcut2 li:active{
-    background:#171717;
+.shortcut .shortcut2 li:active {
+	background: #171717;
 }
-.history li{
-	background:#1f1f1f;
+.history li {
+	background: #1f1f1f;
 }
-.emptyHistory{
+.emptyHistory {
 	-webkit-filter: invert(100%) brightness(60%);
 	filter: invert(100%) brightness(60%);
-	background-color:#ccc;
+	background-color: #ccc;
 }
 .suggestion li {
 	-webkit-filter: invert(100%) brightness(60%);
 	filter: invert(100%) brightness(60%);
 }
-.suggestion li:active{
+.suggestion li:active {
 	background-color: #c4c4c4;
 }
 .shortcut3 li:not(:first-child),
@@ -78,36 +78,48 @@ body {
 .set-option:active {
 	background: #212121;
 }
+.set-option .set-checkbox:checked + label:before {
+	-webkit-filter: brightness(60%);
+	filter: brightness(60%);
+}
+.set-option .set-checkbox + label::after{
+	-webkit-filter: brightness(60%);
+	filter: brightness(60%);
+}
+.set-hr {
+	background-color: #212121;
+}
 /* 精选页面 */
-.page-choice .page-content{
-    background: #1f2120;
+.page-choice .page-content {
+	background: #1f2120;
 }
-.choice-li a div{
-    background: #282828;
+.choice-li a div {
+	background: #282828;
 }
-.choice-li a:active > div,.choice-ul li:active{
-    background: #181818;
+.choice-li a:active > div,
+.choice-ul li:active {
+	background: #181818;
 }
-.choice-ul li{
-    color: #545454;
+.choice-ul li {
+	color: #545454;
 }
-.choice-close{
+.choice-close {
 	-webkit-filter: invert(85%);
 	filter: invert(85%);
 	border-radius: 0 0 9px 9px;
 }
-.choice-cut .list .content{
-    background: linear-gradient(to right bottom,#2c2c22,#272727);
+.choice-cut .list .content {
+	background: linear-gradient(to right bottom, #2c2c22, #272727);
 }
-.choice-cut .list{
+.choice-cut .list {
 	-webkit-filter: brightness(60%);
 	filter: brightness(60%);
 }
-.choice-li img{
+.choice-li img {
 	-webkit-filter: brightness(60%);
 	filter: brightness(60%);
 }
-.logo{
+.logo {
 	-webkit-filter: brightness(60%);
 	filter: brightness(60%);
 }

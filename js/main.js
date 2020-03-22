@@ -1,5 +1,5 @@
 require.config({
-	urlArgs: "v=1.49.158471",
+	urlArgs: "v=1.49.158487",
 	baseUrl: "js/lib"
 });
 
@@ -49,32 +49,27 @@ require(['jquery'], function ($) {
 		}
 	};
 
-	// 存储内容容器
-	var Storage = [];
-
-	/**
-	 * 加载存储内容
-	 */
-	var loadStorage = {
-		/**
-		 * 初始化存储内容
-		 */
-		initSetData: function () {
-			Storage.setData = { engines: "quark", bookcolor: "black", searchHistory: true };
-			store.set("setData", Storage.setData);
+	var settingsFn = function (storage) {
+		this.storage = { engines: "quark", bookcolor: "black", searchHistory: true };
+		this.storage = $.extend({}, this.storage, storage);
+	}
+	settingsFn.prototype = {
+		// 读取设置项
+		get: function (key) {
+			return this.storage[key];
 		},
-		/**
-		 * 加载设置数据 壁纸|LOGO|书签颜色|夜间模式
-		 */
-		applyItem: function () {
-			if (store.has("setData")) {
-				Storage.setData = store.get("setData");
-			} else {
-				this.initSetData();
-			}
+		// 设置设置项并应用
+		set: function (key, val) {
+			this.storage[key] = val;
+			store.set("setData", this.storage);
+			this.apply();
+		},
+		// 应用设置项
+		apply: function () {
+			var that = this;
 			// 加载LOGO
-			if (Storage.setData.logo) {
-				$(".logo").html('<img src="' + Storage.setData.logo + '" />');
+			if (that.get('logo')) {
+				$(".logo").html('<img src="' + that.get('logo') + '" />');
 			} else {
 				$(".logo").html('<svg style="max-width:100px;max-height:100px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><path d="M10.7,21.4c5.1-5.5,10.2-11,15.3-16.5c0.7,3.9,1.4,7.9,2.2,11.8C24.5,20.8,20.8,24.9,17,29  c-2.3,2.5-4.5,5-6.8,7.4c-0.2,0.3-0.6,0.4-1,0.3c-2.8-0.9-5.7-1.9-8.5-2.8c-0.4-0.1-0.7-0.5-0.6-0.9c0.1-0.2,0.2-0.4,0.4-0.5  C4,28.7,7.3,25,10.7,21.4z" fill="#FF3E00"></path><path d="M26.1,4.9c3.2,0.3,6.5,0.5,9.7,0.7c0.6,0.1,1,0.5,1.1,1c3.6,10.5,7.1,21.1,10.6,31.6c0.4,1-0.5,2.1-1.5,2.3  c-3.7,0.7-7.4,1.4-11.2,2.2c-0.5,0.1-1.1,0.1-1.5-0.2c-0.5-0.4-0.5-1.1-0.6-1.7c-1.5-8-3-16-4.5-24.1C27.5,12.8,26.7,8.8,26.1,4.9z" fill="#FFB700"></path><path d="M4.3,12.5c2.2-0.4,4.4-0.7,6.7-1c0.2-0.1,0.5,0.1,0.5,0.4c-0.2,3.2-0.5,6.4-0.7,9.6C7.3,25,4,28.7,0.6,32.4  c-0.2,0.2-0.3,0.3-0.4,0.5c0-0.5,0.1-1,0.2-1.5c1.1-6.1,2.2-12.2,3.3-18.4C3.7,12.8,4,12.5,4.3,12.5z" fill="#00A4F5"></path></svg>');
 			}
@@ -86,16 +81,16 @@ require(['jquery'], function ($) {
 					$("#nightCss").removeAttr('disabled');
 				},
 				off: function () {
-					if (Storage.setData.wallpaper) {
-						$("body").css("background-image", "url(" + Storage.setData.wallpaper + ")");
+					if (that.get('wallpaper')) {
+						$("body").css("background-image", "url(" + that.get('wallpaper') + ")");
 					} else {
 						$("body").css("background-image", "");
 					}
-					$("body").removeClass('theme-black theme-white').addClass('theme-' + Storage.setData.bookcolor);
+					$("body").removeClass('theme-black theme-white').addClass('theme-' + that.get('bookcolor'));
 					$("#nightCss").attr('disabled', true);
 				}
 			};
-			if (Storage.setData.nightMode === true) {
+			if (that.get('nightMode') === true) {
 				nightMode.on();
 			} else {
 				nightMode.off();
@@ -115,8 +110,9 @@ require(['jquery'], function ($) {
 				nightMode.on();
 			}
 		}
-	};
-	loadStorage.applyItem();
+	}
+	var settings = new settingsFn(store.get("setData"));
+	settings.apply();
 
 	/**
 	 * DOM长按事件
@@ -444,7 +440,7 @@ require(['jquery'], function ($) {
 		},
 		add: function (text) {
 			var data = this.options.data;
-			if (Storage.setData.searchHistory === true) {
+			if (settings.get('searchHistory') === true) {
 				var pos = data.indexOf(text);
 				if (pos !== -1) {
 					data.splice(pos, 1);
@@ -727,7 +723,7 @@ require(['jquery'], function ($) {
 		searchHistory.add(text);
 		history.go(-1);
 		setTimeout(function () { // 异步执行 兼容QQ浏览器
-			if (Storage.setData.engines === "via") {
+			if (settings.get('engines') === "via") {
 				window.via.searchText(text);
 			} else {
 				location.href = {
@@ -738,8 +734,8 @@ require(['jquery'], function ($) {
 					sm: "https://m.sm.cn/s?q=%s",
 					haosou: "https://www.so.com/s?q=%s",
 					sogou: "https://www.sogou.com/web?query=%s",
-					diy: Storage.setData.diyEngines
-				}[Storage.setData.engines].replace("%s", text);
+					diy: settings.get('diyEngines')
+				}[settings.get('engines')].replace("%s", text);
 			}
 		}, 1);
 	}
@@ -914,9 +910,7 @@ require(['jquery'], function ($) {
 					var url = 'https://www.bing.com' + res.images[0].url.replace('1920x1080', '1080x1920');
 					$('.back-img').css('background-image', 'url(' + url + ')')
 					$('.back-btn').show().click(function () {
-						Storage.setData.wallpaper = url;
-						store.set("setData", Storage.setData);
-						loadStorage.applyItem();
+						settings.set('wallpaper', url);
 					});
 				}
 			});
@@ -979,13 +973,16 @@ require(['jquery'], function ($) {
 						<p class="set-title">夜间模式</p>
 					</div>
 					<input type="checkbox" value="0" class="set-checkbox" autocomplete="off">
+					<label></label>
 				</li>
 				<li class="set-option" data-value="searchHistory">
 					<div class="set-text">
 						<p class="set-title">记录搜索历史</p>
 					</div>
 					<input type="checkbox" value="0" class="set-checkbox" autocomplete="off">
+					<label></label>
 				</li>
+				<li class="set-hr"></li>
 				<li class="set-option" data-value="export">
 					<div class="set-text">
 						<p class="set-title">导出主页数据</p>
@@ -996,12 +993,7 @@ require(['jquery'], function ($) {
 						<p class="set-title">导入主页数据</p>
 					</div>
 				</li>
-				<li class="set-option" data-value="openurl">
-					<div class="set-text">
-						<p class="set-title">获取最新版本</p>
-						<p class="set-description">https://github.com/liumingye/quarkHomePage/archive/master.zip</p>
-					</div>
-				</li>
+				<li class="set-hr"></li>
 				<li class="set-option" data-value="openurl">
 					<div class="set-text">
 						<p class="set-title">Github</p>
@@ -1011,7 +1003,7 @@ require(['jquery'], function ($) {
 				<li class="set-option">
 					<div class="set-text">
 						<p class="set-title">关于</p>
-						<p class="set-description">当前版本：1.49.158471<br>作者：BigLop</p>
+						<p class="set-description">当前版本：1.49.158487<br>作者：BigLop</p>
 					</div>
 				</li>
 			</ul>
@@ -1025,15 +1017,11 @@ require(['jquery'], function ($) {
 			$('option[value=via]').show();
 		}
 
-		$.each(Storage.setData, function (i, v) {
-			var select = $(".set-option[data-value=" + i + "]").find(".set-select");
-			if (select) {
-				select.val(v);
-			}
-			var checkbox = $(".set-option[data-value=" + i + "]").find(".set-checkbox");
-			if (checkbox) {
-				checkbox.prop("checked", v);
-			}
+		$(".set-option .set-select").map(function () {
+			$(this).val(settings.get($(this).parent().data('value')));
+		});
+		$(".set-option .set-checkbox").map(function () {
+			$(this).prop("checked", settings.get($(this).parent().data('value')));
 		});
 
 		$(".set-back").click(function () {
@@ -1056,9 +1044,7 @@ require(['jquery'], function ($) {
 					$this.find('.set-title').text('壁纸上传中...');
 					uploadFile(file, {
 						success: function (url) {
-							Storage.setData.wallpaper = url;
-							store.set("setData", Storage.setData);
-							$("body").css("background-image", "url(" + Storage.setData.wallpaper + ")");
+							settings.set('wallpaper', url);
 							alert('壁纸上传成功！');
 						},
 						error: function (msg) {
@@ -1075,17 +1061,14 @@ require(['jquery'], function ($) {
 					var file = this.files[0];
 					var reader = new FileReader();
 					reader.onload = function () {
-						Storage.setData.logo = this.result;
-						store.set("setData", Storage.setData);
-						$(".logo").html('<img src="' + Storage.setData.logo + '" />');
+						settings.set('logo', this.result);
 					};
 					reader.readAsDataURL(file);
 				});
 			} else if (value === "delLogo") {
-				Storage.setData.wallpaper = "";
-				Storage.setData.logo = "";
-				Storage.setData.bookcolor = "black";
-				store.set("setData", Storage.setData);
+				settings.set('wallpaper', '');
+				settings.set('logo', '');
+				settings.set('bookcolor', 'black');
 				location.reload();
 			} else if (value === "openurl") {
 				open($this.find('.set-description').text());
@@ -1131,18 +1114,16 @@ require(['jquery'], function ($) {
 				value = dom.val();
 			if (item === "engines" && value === "diy") {
 				var engines = prompt("输入搜索引擎网址，（用“%s”代替搜索字词）");
+				console.log(engines);
 				if (engines) {
-					Storage.setData.diyEngines = engines;
+					settings.set('diyEngines', engines);
 				} else {
-					dom.val(Storage.setData.engines);
-					return;
+					dom.val(settings.get('engines'));
+					return false;
 				}
 			}
 			// 保存设置
-			Storage.setData[item] = value;
-			store.set("setData", Storage.setData);
-			// 应用设置
-			loadStorage.applyItem();
+			settings.set(item, value);
 		});
 
 		$(".set-checkbox").change(function () {
@@ -1150,10 +1131,7 @@ require(['jquery'], function ($) {
 				item = dom.parent().data("value"),
 				value = dom.prop("checked");
 			// 保存设置
-			Storage.setData[item] = value;
-			store.set("setData", Storage.setData);
-			// 应用设置
-			loadStorage.applyItem();
+			settings.set(item, value);
 		});
 
 	});
