@@ -403,8 +403,7 @@ require(['jquery'], function ($) {
 	}
 	searchHistoryFn.prototype = {
 		init: function () {
-			var data = this.options.data;
-			data = data.slice(0, 10);
+			this.options.data = this.options.data.slice(0, 10);
 			this.load();
 			this.bind();
 		},
