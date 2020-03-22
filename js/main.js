@@ -1,5 +1,5 @@
 require.config({
-	urlArgs: "v=1.49.158487",
+	urlArgs: "v=1.49.158488",
 	baseUrl: "js/lib"
 });
 
@@ -1002,7 +1002,7 @@ require(['jquery'], function ($) {
 				<li class="set-option">
 					<div class="set-text">
 						<p class="set-title">关于</p>
-						<p class="set-description">当前版本：1.49.158487<br>作者：BigLop</p>
+						<p class="set-description">当前版本：1.49.158488<br>作者：BigLop</p>
 					</div>
 				</li>
 			</ul>

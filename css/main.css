@@ -419,20 +419,20 @@ body,html {
 	right: 20px;
 }
 .set-option .set-checkbox:checked + label:before {
-	background: #6c76e2;
+	background: #193ee8;
 	transition: right .3s cubic-bezier(.18,.89,.35,1.15);
 }
 .set-option .set-checkbox + label::before {
-	height: 28px;
-	width: 48px;
+	height: 24px;
+	width: 40px;
 	border-radius: 999px;
 	background: rgba(214, 214, 214, 0.434);
 }
 .set-option .set-checkbox + label::after {
-	height: 20px;
-	width: 20px;
+	height: 18px;
+	width: 18px;
 	border-radius: 50%;
-	right: 44px;
+	right: 38px;
 	background: #fff;
 }
 .set-option .set-checkbox:checked + label:after {
