@@ -449,6 +449,13 @@ body,html {
 .set-select{float:right;
 	background-color: var(--bg);
 	color: var(--dark);
+	border: none;
+	appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	direction: rtl;
+	font-size: 14px;
+	color: #808080;
 }
 .set-hr{
 	height: 10px;
