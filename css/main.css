@@ -296,13 +296,15 @@ body,html {
 	background: url(../img/empty.png) no-repeat 8px center;
 	background-size: 14px;
 	width: 30px;
+	height: 30px;
+    line-height: 30px;
 	right: 25px;
 	position: absolute;
 	top: 15px;
 	background-color: #f5f5f5;
 	border-radius: 999px;
-	padding: 8px 0 8px 30px;
-	transition: .3s;
+	padding-left: 30px;
+	transition: width .3s;
 }
 .emptyHistory.animation{
 	width: 92px;

@@ -562,7 +562,7 @@ require(['jquery'], function ($) {
 				$(".page-search").off('transitionend');
 				$('body').css("pointer-events", "");
 			}).addClass("animation");
-			$(".search-input").focus();
+			$(".search-input").val("").focus();
 			$(".history").show().addClass("animation");
 			$(".input-bg").addClass("animation");
 			$(".shortcut").addClass("animation");
