@@ -55,6 +55,9 @@ require(['jquery'], function ($) {
 		this.storage = $.extend({}, this.storage, storage);
 	}
 	settingsFn.prototype = {
+		getJson: function () {
+			return this.storage;
+		},
 		// 读取设置项
 		get: function (key) {
 			return this.storage[key];
@@ -214,6 +217,9 @@ require(['jquery'], function ($) {
 			this.$ele.html(html);
 			this.bind();
 		},
+		getJson: function () {
+			return this.options.data;
+		},
 		bind: function () {
 			var that = this;
 			var data = this.options.data;
@@ -271,7 +277,31 @@ require(['jquery'], function ($) {
 						// 取消书签编辑状态
 						$(document).click();
 						// 插入html
-						$('#app').append('<div class="addbook-shade"><div class="addbook-from"><div class="addbook-title">添加书签</div><div class="addbook-content"><input type="text" class="addbook-input addbook-name" placeholder="名字" /><input type="text" class="addbook-input addbook-url" placeholder="网址" value="http://" /><div id="addbook-upload">点击选择图标</div></div><div class="addbook-btn"><a class="addbook-close">取消</a><a class="addbook-ok">确定</a></div></div></div>');
+						$('#app').append(`<div class="page-bg"></div>
+						<div class="page-addbook">
+							<ul class="addbook-choice">
+								<li class="current">站点</li>
+								<!-- <li>书签</li>
+								<li>历史</li> -->
+								<span class="active-span"></span>
+							</ul>
+							<div class="addbook-content">
+								<div class="addbook-sites">
+								<input type="text" class="addbook-input addbook-url" placeholder="输入网址" value="http://" />
+								<input type="text" class="addbook-input addbook-name" placeholder="输入网站名" />
+									<div id="addbook-upload">点击选择图标</div>
+									<div class="addbook-ok">确认添加</div>
+								</div>
+								<div class="bottom-close"></div>
+							</div>
+						</div>`);
+
+						setTimeout(function () {
+							$(".page-bg").addClass("animation");
+							$(".addbook-choice").addClass("animation");
+							$(".addbook-content").addClass("animation");
+						}, 50);
+
 						//绑定事件
 						$("#addbook-upload").click(function () {
 							openFile(function () {
@@ -280,7 +310,7 @@ require(['jquery'], function ($) {
 								$(".addbook-ok").css("pointer-events", "none");
 								uploadFile(file, {
 									success: function (url) {
-										$("#addbook-upload").html('<img src="' + url + '"></img><div>' + file.name + '</div>');
+										$("#addbook-upload").html('<img src="' + url + '"></img><p>' + file.name + '</p>');
 									},
 									error: function (msg) {
 										$("#addbook-upload").html('上传图标失败！' + msg);
@@ -313,22 +343,26 @@ require(['jquery'], function ($) {
 									ctx.fillText(name.substr(0, 1), 50, 52);
 									icon = canvas.toDataURL("image/png");
 								}
-								$(".addbook-close").click();
+								$(".bottom-close").click();
 								bookMark.add(name, url, icon);
 							}
 						});
-						$(".addbook-close").click(function () {
-							$(".addbook-shade").css({ "animation": "fadeOut forwards .3s", "pointer-events": "none" });
-							$(".addbook-from").css("animation", "down2 forwards .3s");
+						$(".bottom-close").click(function () {
+							$(".page-addbook").css({ "pointer-events": "none" });
+							$(".page-bg").removeClass("animation");
+							$(".addbook-choice").removeClass("animation");
+							$(".addbook-content").removeClass("animation");
 							setTimeout(function () {
-								$(".addbook-shade").remove();
+								$(".page-addbook").remove();
+								$(".page-bg").remove();
 							}, 300);
 						});
-						$(".addbook-shade").click(function (evt) {
+						$(".page-addbook").click(function (evt) {
 							if (evt.target === evt.currentTarget) {
-								$(".addbook-close").click();
+								$(".bottom-close").click();
 							}
 						});
+
 					})
 				} else {
 					$(".addbook").addClass("animation");
@@ -662,23 +696,23 @@ require(['jquery'], function ($) {
 		if (evt.target.nodeName === "LI") {
 			var text = evt.target.innerText;
 			var data = {
-				百科: "https://baike.baidu.com/item/",
-				视频: "https://www.soku.com/m/y/video?q=",
-				豆瓣: "https://m.douban.com/search/?query=",
-				新闻: "https://news.baidu.com/news#/search/",
-				图片: "https://cn.bing.com/images/search?q=",
-				微博: "https://m.weibo.cn/search?containerid=100103type=1&q=",
-				音乐: "http://m.music.migu.cn/v3/search?keyword=",
-				知乎: "https://www.zhihu.com/search?q=",
-				小说: "https://m.qidian.com/search?kw=",
-				旅游: "https://h5.m.taobao.com/trip/rx-search/list/index.html?keyword=",
-				地图: "https://m.amap.com/search/mapview/keywords=",
-				电视剧: "https://m.v.qq.com/search.html?keyWord=",
-				股票: "https://emwap.eastmoney.com/info/search/index?t=14&k=",
-				汽车: "http://sou.m.autohome.com.cn/zonghe?q="
+				百科: "https://baike.baidu.com/search?word=%s",
+				视频: "https://m.v.qq.com/search.html?act=0&keyWord=%s",
+				豆瓣: "https://m.douban.com/search/?query=%s",
+				新闻: "http://m.toutiao.com/search/?&keyword=%s",
+				图片: "https://m.baidu.com/sf/vsearch?pd=image_content&word=%s&tn=vsearch&atn=page",
+				微博: "https://m.weibo.cn/search?containerid=100103type=1&q=%s",
+				音乐: "http://m.music.migu.cn/v3/search?keyword=%s",
+				知乎: "https://www.zhihu.com/search?q=%s",
+				小说: "https://m.qidian.com/search?kw=%s",
+				旅游: "https://h5.m.taobao.com/trip/rx-search/list/index.html?&keyword=%s",
+				地图: "https://m.amap.com/search/mapview/keywords=%s",
+				电视剧: "http://m.iqiyi.com/search.html?key=%s",
+				股票: "https://emwap.eastmoney.com/info/search/index?t=14&k=%s",
+				汽车: "https://sou.m.autohome.com.cn/zonghe?q=%s"
 			}
 			if (data[text]) {
-				location.href = data[text] + $(".search-input").val();
+				location.href = data[text].replace("%s", $(".search-input").val());
 			}
 		}
 	});
@@ -727,13 +761,13 @@ require(['jquery'], function ($) {
 				window.via.searchText(text);
 			} else {
 				location.href = {
-					baidu: "https://www.baidu.com/s?wd=%s",
+					baidu: "https://m.baidu.com/s?wd=%s",
 					quark: "https://quark.sm.cn/s?q=%s",
-					google: "https://www.google.com.hk/search?q=%s",
+					google: "https://www.google.com/search?q=%s",
 					bing: "https://cn.bing.com/search?q=%s",
 					sm: "https://m.sm.cn/s?q=%s",
-					haosou: "https://www.so.com/s?q=%s",
-					sogou: "https://www.sogou.com/web?query=%s",
+					haosou: "https://m.so.com/s?q=%s",
+					sogou: "https://m.sogou.com/web/searchList.jsp?keyword=%s",
 					diy: settings.get('diyEngines')
 				}[settings.get('engines')].replace("%s", text);
 			}
@@ -743,7 +777,7 @@ require(['jquery'], function ($) {
 	//精选页面
 	function choice() {
 		// 构建HTML
-		var data = { '常用': [{ hl: "百度", shl: "百度一下你就知道", img: "baidu", url: "https://m.baidu.com" }, { hl: "腾讯", shl: "手机腾讯网", img: "qq", url: "https://xw.qq.com" }, { hl: "新浪", shl: "联通世界的超级平台", img: "sina", url: "https://sina.cn" }, { hl: "谷歌", shl: "最大的搜索引擎", img: "google", url: "https://www.google.com.hk" }, { hl: "搜狐", shl: "懂手机更懂你", img: "sina", url: "https://m.sohu.com" }, { hl: "网易", shl: "各有态度", img: "netease", url: "https://3g.163.com" }, { hl: "起点中文网", shl: "精彩小说大全", img: "qidian", url: "https://m.qidian.com" }, { hl: "淘宝", shl: "淘我喜欢", img: "taobao", url: "https://m.taobao.com" }, { hl: "京东", shl: "多好快省品质生活", img: "jd", url: "https://m.jd.com" }, { hl: "百度贴吧", shl: "最大的中文社区", img: "tieba", url: "http://c.tieba.baidu.com" }, { hl: "12306", shl: "你离世界只差一张票", img: "12306", url: "https://www.12306.cn" }, { hl: "飞猪", shl: "阿里旅行再升级", img: "flypig", url: "https://www.fliggy.com" }, { hl: "查快递", shl: "快递查询", img: "express_100", url: "https://m.kuaidi100.com" }, { hl: "优酷", shl: "热门视频全面覆盖", img: "youku", url: "https://www.youku.com" }, { hl: "爱奇艺", shl: "中国领先的视频门户", img: "iqiyi", url: "https://m.iqiyi.com" }, { hl: "斗鱼", shl: "每个人的直播平台", img: "douyu", url: "https://m.douyu.com" }, { hl: "虎牙", shl: "中国领先的互动直播平台", img: "huya", url: "https://m.huya.com" }, { hl: "美团", shl: "吃喝玩乐全都有", img: "meituan", url: "http://i.meituan.com" }, { hl: "小米", shl: "小米官网", img: "xiaomi", url: "https://m.mi.com" }, { hl: "58同城", shl: "让生活更简单", img: "tongcheng", url: "https://m.58.com" }, { hl: "九游", shl: "发现更多好游戏", img: "game_9", url: "http://a.9game.cn" }, { hl: "虎扑", shl: "最篮球的世界", img: "hupu", url: "https://m.hupu.com" }], '科技': [{ hl: "知乎", shl: "知识分享社区", img: "zhihu", url: "https://www.zhihu.com" }, { hl: "36kr", shl: "互联网创业资讯", img: "kr36", url: "https://36kr.com" }, { hl: "少数派", shl: "高质量应用推荐", img: "sspai", url: "https://sspai.com" }, { hl: "爱范儿", shl: "泛科技媒体", img: "ifanr", url: "https://www.ifanr.com" }, { hl: "ZEALER", shl: "电子产品评测网站", img: "zealer", url: "https://m.zealer.com" }, { hl: "瘾科技", shl: "科技新闻和测评", img: "engadget", url: "https://cn.engadget.com" }, { hl: "虎嗅网", shl: "科技媒体", img: "huxiu", url: "https://m.huxiu.com" }, { hl: "品玩", shl: "有品好玩的科技", img: "pingwest", url: "https://www.pingwest.com" }, { hl: "简书", shl: "优质原创的内容社区", img: "jianshu", url: "https://www.jianshu.com" }, { hl: "V2EX", shl: "关于分享和探索的地方", img: "v2ex", url: "https://www.v2ex.com" }], '生活': [{ hl: "豆瓣", shl: "一个神奇的社区", img: "douban", url: "https://m.douban.com/home_guide" }, { hl: "轻芒杂志", shl: "生活兴趣杂志", img: "qingmang", url: "http://zuimeia.com" }, { hl: "ONE", shl: "韩寒监制", img: "one", url: "http://m.wufazhuce.com" }, { hl: "蚂蜂窝", shl: "旅游攻略社区", img: "mafengwo", url: "https://m.mafengwo.cn" }, { hl: "小红书", shl: "可以买到国外的好东西", img: "xiaohongshu", url: "https://www.xiaohongshu.com" }, { hl: "什么值得买", shl: "应该能省点钱吧", img: "smzdm", url: "https://m.smzdm.com" }, { hl: "淘票票", shl: "不看书，就看几场电影吧", img: "taopiaopiao", url: "https://dianying.taobao.com" }, { hl: "下厨房", shl: "是男人就学做几道菜", img: "xiachufang", url: "https://m.xiachufang.com" }, { hl: "ENJOY", shl: "高端美食团购", img: "enjoy", url: "https://enjoy.ricebook.com" }], '工具': [{ hl: "豌豆荚设计", shl: "发现最优美的应用", img: "wandoujia", url: "https://m.wandoujia.com/award" }, { hl: "喜马拉雅听", shl: "音频分享平台", img: "ximalaya", url: "https://m.ximalaya.com" }, { hl: "第二课堂", shl: "守护全国2亿青少年健康成长", img: "2-class", url: "https://m.2-class.com/" }, { hl: "Mozilla", shl: "学习web开发的最佳实践", img: "mozilla", url: "https://developer.mozilla.org/zh-CN" }, { hl: "网易公开课", shl: "人chou就要多学习", img: "netease_edu_study", url: "http://m.open.163.com" }, { hl: "石墨文档", shl: "可多人实时协作的云端文档", img: "sm", url: "https://shimo.im" }] },
+		var data = { "常用": [{ "hl": "百度", "shl": "百度一下你就知道", "img": "baidu", "url": "m.baidu.com" }, { "hl": "腾讯", "shl": "手机腾讯网", "img": "qq", "url": "xw.qq.com" }, { "hl": "新浪", "shl": "联通世界的超级平台", "img": "sina", "url": "sina.cn" }, { "hl": "谷歌", "shl": "最大的搜索引擎", "img": "google", "url": "www.google.com.hk" }, { "hl": "搜狐", "shl": "懂手机更懂你", "img": "sina", "url": "m.sohu.com" }, { "hl": "网易", "shl": "各有态度", "img": "netease", "url": "3g.163.com" }, { "hl": "起点中文网", "shl": "精彩小说大全", "img": "qidian", "url": "m.qidian.com" }, { "hl": "淘宝", "shl": "淘我喜欢", "img": "taobao", "url": "m.taobao.com" }, { "hl": "京东", "shl": "多好快省品质生活", "img": "jd", "url": "m.jd.com" }, { "hl": "百度贴吧", "shl": "最大的中文社区", "img": "tieba", "url": "c.tieba.baidu.com" }, { "hl": "12306", "shl": "你离世界只差一张票", "img": "12306", "url": "www.12306.cn/mormhweb/" }, { "hl": "飞猪", "shl": "阿里旅行再升级", "img": "flypig", "url": "www.fliggy.com" }, { "hl": "查快递", "shl": "快递查询", "img": "kuaidi", "url": "yz.m.sm.cn/s?from=wy279236&q=%E6%9F%A5%E5%BF%AB%E9%80%92" }, { "hl": "优酷", "shl": "热门视频全面覆盖", "img": "youku", "url": "www.youku.com" }, { "hl": "爱奇艺", "shl": "中国领先的视频门户", "img": "iqiyi", "url": "m.iqiyi.com" }, { "hl": "斗鱼", "shl": "每个人的直播平台", "img": "douyu", "url": "m.douyu.com" }, { "hl": "虎牙", "shl": "中国领先的互动直播平台", "img": "huya", "url": "m.huya.com" }, { "hl": "美团", "shl": "吃喝玩乐全都有", "img": "meituan", "url": "i.meituan.com" }, { "hl": "小米", "shl": "小米官网", "img": "xiaomi", "url": "m.mi.com" }, { "hl": "58同城", "shl": "让生活更简单", "img": "tongcheng", "url": "m.58.com" }, { "hl": "九游", "shl": "发现更多好游戏", "img": "game_9", "url": "a.9game.cn" }, { "hl": "虎扑", "shl": "最篮球的世界", "img": "hupu", "url": "m.hupu.com" }], "科技": [{ "hl": "知乎", "shl": "知识分享社区", "img": "zhihu", "url": "www.zhihu.com" }, { "hl": "36kr", "shl": "互联网创业资讯", "img": "kr36", "url": "36kr.com" }, { "hl": "少数派", "shl": "高质量应用推荐", "img": "sspai", "url": "sspai.com" }, { "hl": "爱范儿", "shl": "泛科技媒体", "img": "ifanr", "url": "www.ifanr.com" }, { "hl": "ZEALER", "shl": "电子产品评测网站", "img": "zealer", "url": "m.zealer.com" }, { "hl": "瘾科技", "shl": "科技新闻和测评", "img": "engadget", "url": "cn.engadget.com" }, { "hl": "虎嗅网", "shl": "科技媒体", "img": "huxiu", "url": "m.huxiu.com" }, { "hl": "品玩", "shl": "有品好玩的科技", "img": "pingwest", "url": "www.pingwest.com" }, { "hl": "简书", "shl": "优质原创的内容社区", "img": "jianshu", "url": "jianshu.com" }, { "hl": "V2EX", "shl": "关于分享和探索的地方", "img": "v2ex", "url": "www.v2ex.com" }], "生活": [{ "hl": "豆瓣", "shl": "一个神奇的社区", "img": "douban", "url": "m.douban.com" }, { "hl": "轻芒杂志", "shl": "生活兴趣杂志", "img": "qingmang", "url": "qingmang.me/magazines/" }, { "hl": "ONE", "shl": "韩寒监制", "img": "one", "url": "m.wufazhuce.com" }, { "hl": "蚂蜂窝", "shl": "旅游攻略社区", "img": "mafengwo", "url": "m.mafengwo.cn" }, { "hl": "小红书", "shl": "可以买到国外的好东西", "img": "xiaohongshu", "url": "www.xiaohongshu.com" }, { "hl": "什么值得买", "shl": "应该能省点钱吧", "img": "smzdm", "url": "m.smzdm.com" }, { "hl": "淘票票", "shl": "不看书，就看几场电影吧", "img": "taopiaopiao", "url": "dianying.taobao.com" }, { "hl": "下厨房", "shl": "是男人就学做几道菜", "img": "xiachufang", "url": "m.xiachufang.com" }, { "hl": "ENJOY", "shl": "高端美食团购", "img": "enjoy", "url": "enjoy.ricebook.com" }], "工具": [{ "hl": "豌豆荚设计", "shl": "发现最优美的应用", "img": "wandoujia", "url": "m.wandoujia.com/award" }, { "hl": "喜马拉雅听", "shl": "音频分享平台", "img": "ximalaya", "url": "m.ximalaya.com" }, { "hl": "第2课堂", "shl": "守护全国2亿青少年健康成长", "img": "2-class", "url": "m.2-class.com" }, { "hl": "Mozilla", "shl": "学习web开发的最佳实践", "img": "mozilla", "url": "developer.mozilla.org/zh-CN" }, { "hl": "网易公开课", "shl": "人chou就要多学习", "img": "netease_edu_study", "url": "m.open.163.com" }, { "hl": "石墨文档", "shl": "可多人实时协作的云端文档", "img": "sm", "url": "shimo.im" }] },
 			html = '<div class="page-bg"></div><div class="page-choice"><div class="page-content"><ul class="choice-ul">',
 			tabHtml = '<li class="current">捷径</li>',
 			contentHtml = `<li class="choice-cut swiper-slide">
@@ -758,7 +792,7 @@ require(['jquery'], function ($) {
 			<div class="list h3"><a class="flex-1 content" href="https://quark.sm.cn/api/rest?method=movieRec.index&format=html" style="background-image:linear-gradient(143deg, #3c446e 1%, #697994 100%)"><div class="hl relative">今日高分影荐</div><div class="video-list"><div class="video-swipe"><div class="swiper-wrapper"></div></div></div></a><a class="flex-right content"><div class="hl back-hl">今日份壁纸</div><div class="back-img"></div><div class="back-btn">设置为壁纸</div></a></div>
 			<div class="list h2"><a class="flex-1 content" href="https://quark.sm.cn/s?q=热搜&tab=zhihu" style="background-image:linear-gradient(135deg, rgb(52, 55, 60) 0%, rgb(77, 78, 86) 100%)"><p class="hl relative">知乎热榜</p><div class="audio-list"><div class="audio-swipe"><div class="swiper-wrapper"></div></div></div><div class="cmp-icon" style="width: 146px;height: 99px;right: 10px;bottom: 0;background-image: url(https://image.uc.cn/s/uae/g/1y/broccoli/siaNqA6cQ/9JjV6iUso/resources/png/zhihu-icon.1509e7f13366ef5f8c0fab68526ab098.png);"></div></a></div>
 			<div class="list"><a class="flex-1 content" href="https://m.qidian.com" style="background-image:linear-gradient(136deg, rgb(144, 148, 155) 0%, rgb(51, 51, 54) 100%)"><p class="hl">起点中文网</p><p class="shl">精彩好书推荐</p><div class="cmp-icon" style="right: 27px; top: 26px; width: 65px; height: 64px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201910/e6ccf190-fabb-11e9-ba63-ffe4f2687491.png);"></div></a><a class="flex-right content" href="https://quark.sm.cn/api/rest?method=quark_fanyi.dlpage&from=smor&safe=1&schema=v2&format=html&entry=shortcuts" style="linear-gradient(-36deg, rgb(97, 71, 183) 0%, rgb(132, 113, 196) 99%)"><div class="hl">夸克翻译</div><div class="cmp-icon" style="right: 0px; bottom: 0px; width: 47px; height: 45px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/202002/84db9310-52cc-11ea-8024-a1e03ff6fb9b.png);"></div></a></div>
-			<div class="list"><a class="flex-left content" style="background-image:linear-gradient(136deg, rgb(255, 81, 81) 0%, rgb(255, 111, 88) 100%)" href="https://quark.sm.cn/api/rest?method=learning_mode.home&format=html&schema=v2"><div class="hl">夸克学习</div><div class="cmp-icon" style="top: 44.5px; width: 42.5px; height: 45.5px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201912/c69a6570-2265-11ea-ad50-cbf7fc3a7d59.png);"></div></a><a class="flex-1 content" href="https://xw.qq.com" style="background-image:linear-gradient(to right bottom, #becce9, #98b1cf)"><p class="hl" style="left: 76px;top: 30px;">腾讯新闻</p><p class="shl" style="left: 76px;top: 51px;">新闻</p><div class="cmp-icon" style="left: 20px; top: 23px; width: 44px; height: 43.6px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201910/b56c1ef0-f007-11e9-bbee-8910d21fa281.png);"></div></a></div>
+			<div class="list"><a class="flex-left content" style="background-image:linear-gradient(136deg, rgb(255, 81, 81) 0%, rgb(255, 111, 88) 100%)" href="https://quark.sm.cn/api/rest?method=learning_mode.home&format=html&schema=v2"><div class="hl">夸克学习</div><div class="cmp-icon" style="top: 44.5px; width: 42.5px; height: 45.5px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201912/c69a6570-2265-11ea-ad50-cbf7fc3a7d59.png);"></div></a><a class="flex-1 content" href="https://xw.qq.com" style="background-image:linear-gradient(to right bottom, #becce9, #98b1cf)"><p class="hl" style="left: 76px;top: 30px;">腾讯新闻</p><p class="shl" style="left: 76px;top: 51px;">新闻</p><div class="cmp-icon" style="left: 20px; top: 23px; width: 46px; height: 46px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201910/b56c1ef0-f007-11e9-bbee-8910d21fa281.png);"></div></a></div>
 			<div class="list"><a class="flex-1 content" href="https://quark.sm.cn/api/rest?format=html&method=lawservice.home&schema=v2" style="background-image:linear-gradient(136deg, rgb(38, 85, 248) 0%, rgb(20, 152, 230) 100%)"><p class="hl">夸克法律检索</p><p class="shl">专业权威法律检索</p><div class="cmp-icon" style="right: 19px; top: 21px; width: 80px; height: 70px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201912/80869b60-1835-11ea-ae2f-d1f91872b195.png);"></div></a><a class="flex-right content" href="https://quark.sm.cn/s?q=垃圾分类" style="background-image:linear-gradient(to right bottom, #7cecc6, #15b695)"><div class="hl">垃圾分类</div><div class="cmp-icon" style="right: 22px; top: 45px; width: 55px; height: 45px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201910/d0b3d560-f005-11e9-bbee-8910d21fa281.png);"></div></a></div>
 			</li>`;
 
@@ -766,22 +800,22 @@ require(['jquery'], function ($) {
 			tabHtml += "<li>" + i + "</li>";
 			contentHtml += '<li class="choice-li swiper-slide">';
 			for (var i = 0, l = n.length; i < l; i++) {
-				contentHtml += '<a href="' + n[i].url + '"><div><img src="img/choice/' + n[i].img + '.png" /><p>' + n[i].hl + '</p><p>' + n[i].shl + '</p></div></a>';
+				contentHtml += '<a href="http://' + n[i].url + '"><div><img src="img/choice/' + n[i].img + '.png" /><p>' + n[i].hl + '</p><p>' + n[i].shl + '</p></div></a>';
 			}
 			contentHtml += '</li>';
 		});
 
 		// HTML添加到APP
-		$('#app').append(html + tabHtml + '<span class="active-span"></span></ul><div class="choice-swipe"><ul class="swiper-wrapper"><div style="position:absolute;text-align:center;top:50%;width:100%;margin-top:-64px;color:#444">正在加载页面中...</div></ul></div><div class="choice-close"></div></div></div>');
-
-		var dom = $(".choice-ul li");
-		var width = dom.width();
-		$(".active-span").css("transform", "translate3d(" + (width / 2 - 9) + "px,0,0)");
+		$('#app').append(html + tabHtml + '<span class="active-span"></span></ul><div class="choice-swipe"><ul class="swiper-wrapper"><div style="position:absolute;text-align:center;top:50%;width:100%;margin-top:-64px;color:#444">正在加载页面中...</div></ul></div><div class="bottom-close"></div></div></div>');
 
 		setTimeout(function () {
 			$(".page-bg").addClass("animation");
 			$(".page-choice").addClass("animation");
 		}, 1);
+
+		var dom = $(".choice-ul li");
+		var width = dom.width();
+		$(".active-span").css("transform", "translate3d(" + (width / 2 - 9) + "px,0,0)");
 
 		// 动画完成后加载，防止过渡动画卡顿
 		$(".page-choice").on("transitionend", function (evt) {
@@ -816,7 +850,7 @@ require(['jquery'], function ($) {
 			})
 
 			// 绑定关闭按钮事件
-			$(".choice-close").click(function () {
+			$(".bottom-close").click(function () {
 				$(".page-choice").css('pointer-events', 'none').removeClass("animation");
 				$(".page-bg").removeClass("animation");
 				$(".page-choice").on('transitionend', function (evt) {
@@ -939,7 +973,7 @@ require(['jquery'], function ($) {
 							</div>`;
 				if (json.type === 'select') {
 					html += `<select class="set-select">`;
-					for(var i of json.data){
+					for (var i of json.data) {
 						html += `<option value="${i.v}">${i.t}</option>`;
 					}
 					html += `</select>`;
@@ -1018,8 +1052,9 @@ require(['jquery'], function ($) {
 				open($this.find('.set-description').text());
 			} else if (value === "export") {
 				var oInput = $('<input>');
-				oInput.val('{"bookMark":' + JSON.stringify(store.get('bookMark')) + '}');
+				oInput.val('{"bookMark":' + JSON.stringify(bookMark.getJson()) + ',"setData":' + JSON.stringify(settings.getJson()) + '}');
 				document.body.appendChild(oInput[0]);
+				console.log(store.get('bookMark'));
 				oInput.select();
 				document.execCommand("Copy");
 				alert('已复制到剪贴板，请粘贴保存文件。');
@@ -1029,6 +1064,7 @@ require(['jquery'], function ($) {
 				try {
 					data = JSON.parse(data);
 					store.set("bookMark", data.bookMark);
+					store.set("setData", data.setData);
 					alert("导入成功!");
 					location.reload();
 				} catch (e) {

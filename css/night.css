@@ -69,13 +69,7 @@ body {
 .search-btn:active {
 	color: #444;
 }
-.addbook-input,
-.addbook-btn {
-	border-color: #3f3f3f;
-}
-.addbook-btn a:active,
-#addbook-upload:active,
-.set-option:active {
+.addbook-input,#addbook-upload {
 	background: #212121;
 }
 .set-option .set-checkbox:checked + label:before {
@@ -85,6 +79,9 @@ body {
 .set-option .set-checkbox + label::after{
 	-webkit-filter: brightness(60%);
 	filter: brightness(60%);
+}
+.set-option:active{
+	background: #212121;
 }
 .set-hr {
 	background-color: #212121;
@@ -103,7 +100,7 @@ body {
 .choice-ul li {
 	color: #545454;
 }
-.choice-close {
+.bottom-close {
 	-webkit-filter: invert(85%);
 	filter: invert(85%);
 	border-radius: 0 0 9px 9px;
