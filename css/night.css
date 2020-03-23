@@ -13,9 +13,11 @@ body {
 	-webkit-filter: brightness(60%);
 	filter: brightness(60%);
 }
+.bookmark .addbook .img {
+	border: none;
+}
 .bookmark .addbook .img svg {
 	background: #444;
-	border: none;
 }
 .bookmark .addbook .img svg path {
 	fill: #999;
