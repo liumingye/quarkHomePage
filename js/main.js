@@ -1,4 +1,4 @@
-const version = '1.49.158686';
+const version = '1.49.158687';
 require.config({
 	urlArgs: `v=${version}`,
 	baseUrl: "js/lib"
@@ -72,7 +72,7 @@ require(['jquery'], function ($) {
 		apply: function () {
 			var that = this;
 			// 输入框样式细圆
-			if (that.get('inputStyleThin')) {
+			if (that.get('styleThin')) {
 				$("body").append(`<style>
 				.ornament-input-group, .anitInput{
 					height: 50px;
