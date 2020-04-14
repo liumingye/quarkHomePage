@@ -67,7 +67,7 @@ body,html {
 	justify-content: center;
 	padding: 30px;
 	height: 100%;
-	padding-top: 100px;
+	padding-top: 84px;
 }
 .logo {
 	text-align: center;
@@ -84,13 +84,10 @@ body,html {
 	width: 100%;
 }
 .ornament-input-group, .anitInput {
-	border: 1.2px solid var(--dark);
-	height: 50px;
-	border-radius: 999px;
+	border: 2px solid var(--dark);
+	height: 60px;
+	border-radius: 16px;
 	margin-bottom: 20px;
-}
-.ornament-input-group.animation, .anitInput.animation {
-	opacity:0;
 }
 .bookmark{
 	text-align: center;
@@ -148,9 +145,6 @@ body,html {
 .addbook.animation{
 	opacity: 0;
 }
-.addbook .img{
-	border: solid 1px #f1f1f1;
-}
 .addbook .img svg{
 	background: #f9f9f9;
 	border-radius: 50%;
@@ -160,10 +154,11 @@ body,html {
 */
 .theme-white .ornament-input-group,.theme-white .anitInput{
 	border-color:var(--white);
+	opacity: .5;
 }
 .theme-white .bookmark .list .text{
 	color: #fff;
-	text-shadow: 0 0 4px var(--dark);
+	text-shadow: 0 0 4px #999;
 }
 /* 背景页面 */
 .page-addbook,.page-search,.page-settings{position:absolute;left:0;top:0;width:100%;height:100%;}
@@ -178,7 +173,7 @@ body,html {
 	padding: 20px 10px;
 	transform: translateX(40px);
 	opacity: 0;
-	transition: transform .3s, opacity .3s;
+	transition: transform .35s ease-out, opacity .35s;
 }
 .addbook-choice.animation{
 	transform: translateX(0);
@@ -213,7 +208,7 @@ body,html {
 	opacity: 1;
 }
 .addbook-content > div{
-	transition: opacity .15s;
+	transition: opacity .1s;
 	opacity: 0;
 }
 .addbook-content.animation > div{
@@ -262,22 +257,21 @@ body,html {
 	display: none;
 	opacity: 0;
 	transition: opacity .4s;
-	background-color: #fafafa;
+	background-color: #f5f5f5;
 }
 .page-search.animation{
 	opacity: 1;
 }
 .bottom-row{
-	border-top:.5px solid #eee;
 	position: absolute;
 	bottom: 0;
 	width: 100%;
 	background: #fff;
 	overflow: visible;
 }
-.suggestion,.history{overflow:auto;width:100%;
-	max-height: calc(100% - 96px);
-	bottom: 96px;
+.suggestion, .history{overflow:auto;width:100%;
+	max-height: calc(100% - 124px);
+	bottom: 124px;
 	position: absolute;
 }
 .history{
@@ -293,39 +287,44 @@ body,html {
 	transform: translate3d(0,0,0);
 }
 .emptyHistory{
-	background: url(../img/empty.png) no-repeat 8px center;
+	background: url(../img/empty.png) no-repeat 13px center;
 	background-size: 14px;
-	width: 30px;
-	height: 30px;
-    line-height: 30px;
+	width: 40px;
+	height: 40px;
+    display: flex;
+	align-items: center;
 	right: 25px;
 	position: absolute;
-	top: 15px;
-	background-color: #f5f5f5;
-	border-radius: 999px;
-	padding-left: 30px;
+	top: 8px;
+	background-color: #efefef;
+	border-radius: 8px;
+	padding-left: 40px;
 	transition: width .3s;
 }
 .emptyHistory.animation{
-	width: 92px;
+	width: 102px;
 }
 .emptyHistory:after{
 	content: "全部删除";
 	white-space: pre;
 	font-size: 12px;
+	font-weight: bold;
 }
 .history .content{
 	display: flex;
 	flex-flow: wrap-reverse;
+	margin-bottom: 10px;
 }
 .history li{
-	padding: 7px 13px;
-	margin: 10px 6px;
-	background: #eee;
-	border-radius: 999px;
+	padding: 12px 12px;
+	margin: 5px;
+	background: #fff;
+	border-radius: 8px;
 	color:var(--dark);
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	max-width: calc(50% - 10px);
+	font-weight: bold;
 }
 .suggestion li{
 	padding-left:50px;background:url(../img/su.png) no-repeat center;background-size:15px;background-position-x:20px;
@@ -351,7 +350,7 @@ body,html {
 }
 .search-from{
 	display: flex;
-	height: 52px;
+	height: 80px;
 	overflow: visible;
 }
 .s-temp{position:fixed;top:-8pc;}
@@ -360,12 +359,12 @@ body,html {
 	flex:1;
 	overflow: visible;
 	font-size:14px;
-	margin: 8px 14px;
-	background-color: #f8f8f8;
-	border-radius: 999px;
+	margin: 14px 18px;
+	border-radius: 16px;
 	opacity: 0;
 	transition: opacity .3s;
 	will-change: opacity;
+	border: 2px solid transparent;
 }
 .input-bg.animation{
 	opacity: 1;
@@ -373,7 +372,7 @@ body,html {
 .search-input{
 	flex: 1;
 	border:0;
-	padding: 0 20px;
+	padding-left: 20px;
 	background-color: transparent;
 	animation: down .3s;
 	caret-color: #2196F3;
@@ -382,14 +381,16 @@ body,html {
 .search-input::-webkit-input-placeholder{
 	color: #969696;
 }
-.empty-input{display:none;width:50px;height:34px;background:url(../img/delete.png) no-repeat center;background-size:16px;
+.empty-input{display:none;width:50px;height:100%;background:url(../img/delete.png) no-repeat center;background-size:16px;
 }
-.search-btn{padding:0;width:50px;line-height:52px;
+.search-btn{padding:0;width:50px;
 	height: 100%;
 	color: var(--dark);
 	font-size: 15px;
+	align-items: center;
+	display: flex;
+	font-weight: bold;
 }
-.search-btn:active{color:#00f;}
 .shortcut{
 	padding:0 10px;background:#efefef;line-height:25px;
 	height: 44px;
@@ -405,34 +406,41 @@ body,html {
 }
 .shortcut .content ul{
 	display: flex;
+	align-items: center;
 }
 .shortcut *>li{
 	text-align:center;
 	flex: 1;
 }
+.shortcut .shortcut1,
+.shortcut .shortcut2{
+	font-weight: bold;
+}
 .shortcut .shortcut1 li:active,
 .shortcut .shortcut2 li:active{
 	background:#ddd;
 }
-.shortcut ul{color:#646464;}
-.shortcut3>li{padding:0 10px;background-position:center;background-size:20px;background-repeat:no-repeat;}
+.shortcut ul{color:#202020;}
 .shortcut3{
 	overflow-x:scroll;
 }
 .shortcut3 li{
+	padding: 0 10px;
+	margin: 0 4px;
 	flex: auto;
 	flex-shrink: 0;
 	height: 26px;
 	line-height: 26px;
+	font-size:12px;
 }
 .shortcut3 li:first-child{
-	font-size:12px;
-	margin: 9px 0;
+	height: 44px;
+	line-height: 44px;
+	margin: 0;
 }
 .shortcut3 li:not(:first-child){
 	background-color: #fff;
-	border-radius: 999px;
-	margin: 9px 4px;
+	border-radius: 4px;
 }
 
 /* 设置页面 */
@@ -617,7 +625,7 @@ body,html {
 	width:100%;
 	height:40px;
 	background:url(../img/close.png) no-repeat center;
-	background-size:12px;
+	background-size:10px;
 	animation: scale forwards .5s .3s;
 	transform: scale(0);
 	content:"";
@@ -842,8 +850,8 @@ body,html {
 .choice-cut .list .content .back-hl{
 	left:0;right:0;text-align:center;
 }
-.choice-cut .list .content .back-img{
-	width: 100px;height: 195px;border-radius: 15px;margin: -15px -20px;background-size: cover;
+.choice-cut .list .content.back-img{
+	background-size: cover;
 }
 .choice-cut .list .content .back-btn{
 	bottom: 20px;

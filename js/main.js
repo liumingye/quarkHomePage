@@ -1,4 +1,4 @@
-const version = '1.49.158495';
+const version = '1.49.158684';
 require.config({
 	urlArgs: `v=${version}`,
 	baseUrl: "js/lib"
@@ -167,9 +167,10 @@ require(['jquery'], function ($) {
 	 */
 	var uploadFile = function (file, callback) {
 		var imageData = new FormData();
-		imageData.append("file", file);
+		imageData.append("Filedata", file);
+		imageData.append("file", "multipart");
 		$.ajax({
-			url: 'https://apis.yum6.cn/api/5bd90750c3f77?token=f07b711396f9a05bc7129c4507fb65c5',
+			url: 'https://api.uomg.com/api/image.ali',
 			type: 'POST',
 			data: imageData,
 			cache: false,
@@ -178,7 +179,7 @@ require(['jquery'], function ($) {
 			dataType: 'json',
 			success: function (res) {
 				if (res.code == 1) {
-					callback.success && callback.success('https://ps.ssl.qhmsg.com' + res.data.substr(res.data.lastIndexOf("/")));
+					callback.success && callback.success(res.imgurl);
 				} else {
 					callback.error && callback.error(res.msg);
 				}
@@ -271,7 +272,7 @@ require(['jquery'], function ($) {
 					return;
 				}
 				if ($('.addbook').length === 0) {
-					that.$ele.append('<div class="list addbook"><div class="img"><svg viewBox="0 0 1024 1024"><path d="M736.1 480.2H543.8V287.9c0-17.6-14.4-32-32-32s-32 14.4-32 32v192.2H287.6c-17.6 0-32 14.4-32 32s14.4 32 32 32h192.2v192.2c0 17.6 14.4 32 32 32s32-14.4 32-32V544.2H736c17.6 0 32-14.4 32-32 0.1-17.6-14.3-32-31.9-32z" fill="#555"></path></svg></div></div>');
+					that.$ele.append('<div class="list addbook"><div class="img"><svg viewBox="0 0 1024 1024"><path class="st0" d="M673,489.2H534.8V350.9c0-12.7-10.4-23-23-23c-12.7,0-23,10.4-23,23v138.2H350.6c-12.7,0-23,10.4-23,23c0,12.7,10.4,23,23,23h138.2v138.2c0,12.7,10.4,23,23,23c12.7,0,23-10.4,23-23V535.2H673c12.7,0,23-10.4,23-23C696.1,499.5,685.7,489.2,673,489.2z" fill="#222"/></svg></div></div>');
 					$('.addbook').click(function () {
 						$('.addbook').remove();
 						// 取消书签编辑状态
@@ -515,7 +516,7 @@ require(['jquery'], function ($) {
 	$(".ornament-input-group").click(function () {
 		$('body').css("pointer-events", "none");
 		history.pushState(null, document.title, changeParam("page", "search"));
-		// 动画输入框复合
+		// 输入框边框动画
 		$('.anitInput').remove();
 		var ornamentInput = $(".ornament-input-group");
 		var top = ornamentInput.offset().top;
@@ -529,6 +530,14 @@ require(['jquery'], function ($) {
 			'height': ornamentInput.outerHeight(),
 			'pointer-events': 'none'
 		})
+		anitInput.on('transitionend', function (evt) {
+			if (evt.target !== this) {
+				return;
+			}
+			anitInput.unbind('transitionend');
+			$(".input-bg").css("border-color","var(--dark)");
+			anitInput.css("opacity","0");
+		});
 		$('body').append(anitInput);
 		ornamentInput.css('opacity', 0);
 		if ($(window).data('anitInputFn')) {
@@ -542,9 +551,9 @@ require(['jquery'], function ($) {
 			var translateY = inputBg.offset().top - top - (ornamentInput.outerHeight() - inputBg.outerHeight()) / 2;
 			anitInput.css({
 				'transform': 'translateX(' + translateX + 'px) translateY(' + translateY + 'px) scale(' + scaleX + ',' + scaleY + ') translate3d(0,0,0)',
-				'transition': '.3s'
+				'transition': '.3s',
+				'border-color': 'var(--dark)'
 			});
-			anitInput.addClass("animation");
 		}
 		$(window).data('anitInputFn', anitInputFn);
 		$(window).bind('resize', anitInputFn);
@@ -580,19 +589,20 @@ require(['jquery'], function ($) {
 		if ($('.page-search').is(":visible")) {
 			$('body').css("pointer-events", "none");
 			history.replaceState(null, document.title, location.origin + location.pathname);
-			// 动画输入框分离
+			// 输入框边框动画
 			$(window).unbind('resize', $(window).data('anitInputFn'));
 			var anitInput = $('.anitInput');
 			anitInput.css({
 				'transform': '',
-				'transition': '.3s'
+				'transition': '.3s',
+				'opacity': '',
+				'border-color': ''
 			});
-			anitInput.removeClass("animation");
 			// 书签动画
 			$(".bookmark").removeClass("animation");
 			// 隐藏搜索页
 			$(".history").removeClass("animation");
-			$(".input-bg").removeClass("animation");
+			$(".input-bg").css("border-color","").removeClass("animation");
 			$(".shortcut").removeClass("animation");
 			$(".page-search").removeClass("animation");
 			$(".page-search").on('transitionend', function (evt) {
@@ -781,7 +791,7 @@ require(['jquery'], function ($) {
 			html = '<div class="page-bg"></div><div class="page-choice"><div class="page-content"><ul class="choice-ul">',
 			tabHtml = '<li class="current">捷径</li>',
 			contentHtml = `<li class="choice-cut swiper-slide">
-			<div class="list h2"><a class="flex-1 content weather" href="https://quark.sm.cn/s?q=天气"><div>访问中</div><div></div><div></div></a><a class="flex-right content" style="background-image:linear-gradient(148deg, rgb(0, 188, 150) 2%, rgb(129, 239, 201) 98%)"><div class="hl">一言</div><div class="shl" id="hitokoto" style="text-align: center;top: 36px;height: 96px;white-space: pre-line;left: 15px;right: 15px;"><script src="https://v1.hitokoto.cn/?encode=js&select=%23hitokoto" defer></script></div></a></div>
+			<div class="list h2"><a class="flex-1 content weather" href="https://quark.sm.cn/s?q=天气"><div>访问中</div><div></div><div></div></a><a class="flex-right content trivia" style="background-image:linear-gradient(148deg, rgb(0, 188, 150) 2%, rgb(129, 239, 201) 98%)"><div class="hl back-hl">今日冷知识</div><div class="shl" style="text-align: center;left: 15px;right: 15px;font-size: 12px;"></div><div class="cmp-icon" style="right: 20px; bottom: 0px; width: 62px; height: 54px; background-image: url(https://gw.alicdn.com/L1/723/1578466791/b3/f4/94/b3f494c724631d436989a4b7569952df.png);"></div></a></div>
 			<div class="list h3">
 				<div class="flex-left">
 					<div class="list cmp-flex"><a href="https://quark.sm.cn/s?q=NBA"><div class="content" style="background-image:linear-gradient(-36deg, rgb(0, 88, 178) 0%, rgb(102, 158, 214) 99%)"><div class="hl">NBA</div><div class="cmp-icon" style="left: 60px; top: 28px; width: 34px; height: 61px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201912/6abef9b0-1837-11ea-ae2f-d1f91872b195.png);"></div></div></a></div>
@@ -789,7 +799,7 @@ require(['jquery'], function ($) {
 				</div>
 				<a class="flex-1 content" href="https://quark.sm.cn/s?q=热搜&tab=quark" style="background-image:linear-gradient(135deg, rgb(34, 34, 80) 1%, rgb(60, 60, 89) 100%)"><div class="hl relative">热搜榜</div><div class="news-list"></div></a>
 			</div>
-			<div class="list h3"><a class="flex-1 content" href="https://quark.sm.cn/api/rest?method=movieRec.index&format=html" style="background-image:linear-gradient(143deg, #3c446e 1%, #697994 100%)"><div class="hl relative">今日高分影荐</div><div class="video-list"><div class="video-swipe"><div class="swiper-wrapper"></div></div></div></a><a class="flex-right content"><div class="hl back-hl">今日份壁纸</div><div class="back-img"></div><div class="back-btn">设置为壁纸</div></a></div>
+			<div class="list h3"><a class="flex-1 content" href="https://quark.sm.cn/api/rest?method=movieRec.index&format=html" style="background-image:linear-gradient(143deg, #3c446e 1%, #697994 100%)"><div class="hl relative">今日高分影荐</div><div class="video-list"><div class="video-swipe"><div class="swiper-wrapper"></div></div></div></a><a class="flex-right content back-img"><div class="hl back-hl">今日份壁纸</div><div class="back-btn">设置为壁纸</div></a></div>
 			<div class="list h2"><a class="flex-1 content" href="https://quark.sm.cn/s?q=热搜&tab=zhihu" style="background-image:linear-gradient(135deg, rgb(52, 55, 60) 0%, rgb(77, 78, 86) 100%)"><p class="hl relative">知乎热榜</p><div class="audio-list"><div class="audio-swipe"><div class="swiper-wrapper"></div></div></div><div class="cmp-icon" style="width: 146px;height: 99px;right: 10px;bottom: 0;background-image: url(https://image.uc.cn/s/uae/g/1y/broccoli/siaNqA6cQ/9JjV6iUso/resources/png/zhihu-icon.1509e7f13366ef5f8c0fab68526ab098.png);"></div></a></div>
 			<div class="list"><a class="flex-1 content" href="https://m.qidian.com" style="background-image:linear-gradient(136deg, rgb(144, 148, 155) 0%, rgb(51, 51, 54) 100%)"><p class="hl">起点中文网</p><p class="shl">精彩好书推荐</p><div class="cmp-icon" style="right: 27px; top: 26px; width: 65px; height: 64px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201910/e6ccf190-fabb-11e9-ba63-ffe4f2687491.png);"></div></a><a class="flex-right content" href="https://quark.sm.cn/api/rest?method=quark_fanyi.dlpage&from=smor&safe=1&schema=v2&format=html&entry=shortcuts" style="linear-gradient(-36deg, rgb(97, 71, 183) 0%, rgb(132, 113, 196) 99%)"><div class="hl">夸克翻译</div><div class="cmp-icon" style="right: 0px; bottom: 0px; width: 47px; height: 45px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/202002/84db9310-52cc-11ea-8024-a1e03ff6fb9b.png);"></div></a></div>
 			<div class="list"><a class="flex-left content" style="background-image:linear-gradient(136deg, rgb(255, 81, 81) 0%, rgb(255, 111, 88) 100%)" href="https://quark.sm.cn/api/rest?method=learning_mode.home&format=html&schema=v2"><div class="hl">夸克学习</div><div class="cmp-icon" style="top: 44.5px; width: 42.5px; height: 45.5px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201912/c69a6570-2265-11ea-ad50-cbf7fc3a7d59.png);"></div></a><a class="flex-1 content" href="https://xw.qq.com" style="background-image:linear-gradient(to right bottom, #becce9, #98b1cf)"><p class="hl" style="left: 76px;top: 30px;">腾讯新闻</p><p class="shl" style="left: 76px;top: 51px;">新闻</p><div class="cmp-icon" style="left: 20px; top: 23px; width: 46px; height: 46px; background-image: url(https://image.uc.cn/s/uae/g/3o/broccoli/resource/201910/b56c1ef0-f007-11e9-bbee-8910d21fa281.png);"></div></a></div>
@@ -888,7 +898,10 @@ require(['jquery'], function ($) {
 				success: function (res) {
 					var data = res.data;
 					for (var i = 0, l = data.length; i < l; i++) {
-						if (data[i].name === "热搜榜") {
+						if (data[i].name === "今日冷知识") {
+							$('.trivia').attr('href',data[i].link);
+							$('.trivia').find('.shl').text(data[i].value.subtitle);
+						} else if (data[i].name === "热搜榜") {
 							var html = '';
 							for (var ii = 0, ll = data[i].value.length; ii < ll; ii++) {
 								html += '<div class="news-item"><div class="news-item-count">' + (ii + 1) + '</div><div class="news-item-title">' + data[i].value[ii].title + '</div><div class="news-item-hot">' + data[i].value[ii].hot + '</div></div>';
@@ -960,7 +973,7 @@ require(['jquery'], function ($) {
 			location.href = "x:bm?sort=default";
 		}
 	}).longPress(() => {
-		var data = [{ "title": "搜索引擎", "type": "select", "value": "engines", "data": [{ "t": "夸克搜索", "v": "quark" }, { "t": "跟随Via浏览器", "v": "via" }, { "t": "百度搜索", "v": "baidu" }, { "t": "谷歌搜索", "v": "google" }, { "t": "必应搜索", "v": "bing" }, { "t": "神马搜索", "v": "sm" }, { "t": "好搜搜索", "v": "haosou" }, { "t": "搜狗搜索", "v": "sogou" }, { "t": "自定义", "v": "diy" }] }, { "title": "设置壁纸", "value": "wallpaper" }, { "title": "设置LOGO", "value": "logo" }, { "title": "恢复默认壁纸和LOGO", "value": "delLogo" }, { "title": "图标颜色", "type": "select", "value": "bookcolor", "data": [{ "t": "深色图标", "v": "black" }, { "t": "浅色图标", "v": "white" }] }, { "title": "夜间模式", "type": "checkbox", "value": "nightMode" }, { "title": "记录搜索历史", "type": "checkbox", "value": "searchHistory" }, { "type": "hr" }, { "title": "导出主页数据", "value": "export" }, { "title": "导入主页数据", "value": "import" }, { "type": "hr" }, { "title": "Github", "value": "openurl", "description": "https://github.com/liumingye/quarkHomePage" }, { "title": "关于", "description": "当前版本：" + version + "<br>作者：BigLop" }];
+		var data = [{ "title": "搜索引擎", "type": "select", "value": "engines", "data": [{ "t": "夸克搜索", "v": "quark" }, { "t": "跟随Via浏览器", "v": "via" }, { "t": "百度搜索", "v": "baidu" }, { "t": "谷歌搜索", "v": "google" }, { "t": "必应搜索", "v": "bing" }, { "t": "神马搜索", "v": "sm" }, { "t": "好搜搜索", "v": "haosou" }, { "t": "搜狗搜索", "v": "sogou" }, { "t": "自定义", "v": "diy" }] }, { "title": "设置壁纸", "value": "wallpaper" }, { "title": "设置LOGO", "value": "logo" }, { "title": "恢复默认壁纸和LOGO", "value": "delLogo" }, { "title": "图标颜色", "type": "select", "value": "bookcolor", "data": [{ "t": "深色图标", "v": "black" }, { "t": "浅色图标", "v": "white" }] }, { "title": "夜间模式", "type": "checkbox", "value": "nightMode" }, { "title": "记录搜索历史", "type": "checkbox", "value": "searchHistory" }, { "type": "hr" }, { "title": "导出主页数据", "value": "export" }, { "title": "导入主页数据", "value": "import" }, { "type": "hr" }, { "title": "Github", "value": "openurl", "description": "https://github.com/liumingye/quarkHomePage" }, { "title": "关于", "description": "当前版本：" + version }];
 		var html = '<div class="page-settings"><div class="set-header"><div class="set-back"></div><p class="set-logo">主页设置</p></div><ul class="set-option-from">';
 		for (var json of data) {
 			if (json.type === 'hr') {
@@ -1018,21 +1031,11 @@ require(['jquery'], function ($) {
 			if (value === "wallpaper") {
 				openFile(function () {
 					var file = this.files[0];
-					$this.css("pointer-events", "none");
-					$this.find('.set-title').text('壁纸上传中...');
-					uploadFile(file, {
-						success: function (url) {
-							settings.set('wallpaper', url);
-							alert('壁纸上传成功！');
-						},
-						error: function (msg) {
-							alert('壁纸上传失败，请重试！错误信息：' + msg);
-						},
-						complete: function () {
-							$this.find('.set-title').text('壁纸');
-							$this.css("pointer-events", "");
-						}
-					});
+					var reader = new FileReader();
+					reader.onload = function () {
+						settings.set('wallpaper', this.result);
+					};
+					reader.readAsDataURL(file);
 				});
 			} else if (value === "logo") {
 				openFile(function () {
@@ -1052,7 +1055,8 @@ require(['jquery'], function ($) {
 				open($this.find('.set-description').text());
 			} else if (value === "export") {
 				var oInput = $('<input>');
-				oInput.val('{"bookMark":' + JSON.stringify(bookMark.getJson()) + ',"setData":' + JSON.stringify(settings.getJson()) + '}');
+				oInput.val('{"bookMark":' + JSON.stringify(bookMark.getJson()) + '}');
+				//oInput.val('{"bookMark":' + JSON.stringify(bookMark.getJson()) + ',"setData":' + JSON.stringify(settings.getJson()) + '}');
 				document.body.appendChild(oInput[0]);
 				console.log(store.get('bookMark'));
 				oInput.select();
@@ -1128,7 +1132,7 @@ require(['jquery'], function ($) {
 				} else if (phase === 'move') {
 					var sliding = Math.max(fingerData[0].end.y - fingerData[0].start.y, 0);
 					$('.logo').attr("disabled", true).css({ 'opacity': 1 - (sliding / this.height) * 4, 'transition': 'none' });
-					$('.ornament-input-group').css({ 'transform': 'translate3d(0,' + Math.min((sliding / this.height) * 50, 30) + 'px,0)', 'transition': 'none' });
+					$('.ornament-input-group').css({ 'transform': 'translate3d(0,' + Math.min((sliding / this.height) * 100, 30) + 'px,0)', 'transition': 'none' });
 					$('.bookmark').attr("disabled", true).css({ 'opacity': 1 - (sliding / this.height) * 4, 'transform': 'scale(' + (1 - (sliding / this.height) * .3) + ')', 'transition': 'none' });
 				} else if (phase === 'end' || phase === 'cancel') {
 					$('.logo').removeAttr("disabled style");
