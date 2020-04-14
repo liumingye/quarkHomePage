@@ -113,13 +113,13 @@ body,html {
 	border: 2px solid var(--dark);
 	height: 60px;
 	border-radius: 16px;
-	margin-bottom: 20px;
+	margin-bottom: 24px;
 }
 .bookmark{
 	text-align: center;
 	display: flex;
 	flex-wrap: wrap;
-	margin: 0 -12%;
+	margin: 0 -10%;
 	padding: 0 30px 180px;
 	transition: transform .4s,opacity .5s;
 	min-height: 90px;
@@ -134,8 +134,8 @@ body,html {
 	position: relative;
 }
 .bookmark .list .img {
-	width: 42px;
-	height: 42px;
+	width: 40px;
+	height: 40px;
 	border-radius: 50%;
 	margin: 0 auto;
 	background-position:center;
@@ -151,7 +151,7 @@ body,html {
 	white-space: nowrap;
 	color: var(--dark);
 	text-shadow: 0 0 4px var(--white);
-	padding: 8px 0;
+	padding: 7px 0 10px;
 }
 .delbook{
 	top: -4px;

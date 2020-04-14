@@ -1,4 +1,4 @@
-const version = '1.49.158688';
+const version = '1.49.158689';
 require.config({
 	urlArgs: `v=${version}`,
 	baseUrl: "js/lib"
