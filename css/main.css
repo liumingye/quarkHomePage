@@ -349,22 +349,20 @@ body,html {
 	background-position: center;
 }
 .search-from{
-	display: flex;
-	height: 80px;
 	overflow: visible;
 }
 .s-temp{position:fixed;top:-8pc;}
 .input-bg{
 	display: flex;
-	flex:1;
 	overflow: visible;
 	font-size:14px;
 	margin: 14px 18px;
-	border-radius: 16px;
+	border-radius: 14px;
 	opacity: 0;
 	transition: opacity .3s;
 	will-change: opacity;
 	border: 2px solid transparent;
+	height: 50px;
 }
 .input-bg.animation{
 	opacity: 1;
@@ -374,22 +372,24 @@ body,html {
 	border:0;
 	padding-left: 20px;
 	background-color: transparent;
-	animation: down .3s;
 	caret-color: #2196F3;
 	color: var(--dark);
+	animation: down .3s;
+	width: 0;
 }
 .search-input::-webkit-input-placeholder{
 	color: #969696;
 }
-.empty-input{display:none;width:50px;height:100%;background:url(../img/delete.png) no-repeat center;background-size:16px;
+.empty-input{display:none;width:50px;height:46px;background:url(../img/delete.png) no-repeat center;background-size:16px;
 }
-.search-btn{padding:0;width:50px;
-	height: 100%;
+.search-btn{
+	margin-right: 20px;
 	color: var(--dark);
-	font-size: 15px;
-	align-items: center;
-	display: flex;
+	font-size: 14px;
+    line-height: 46px;
+    height: 46px;
 	font-weight: bold;
+	animation: down .3s;
 }
 .shortcut{
 	padding:0 10px;background:#efefef;line-height:25px;
