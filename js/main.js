@@ -73,25 +73,7 @@ require(['jquery'], function ($) {
 			var that = this;
 			// 样式细圆
 			if (that.get('styleThin')) {
-				$("body").append(`<style>
-				.ornament-input-group, .anitInput{
-					height: 50px;
-				}
-				.ornament-input-group, .anitInput, .input-bg{
-					border-width:1px;
-					border-radius:999px;
-				}
-				.search-btn, .empty-input{
-					line-height: 48px;
-					height: 48px;
-				}
-				.shortcut3 li:not(:first-child), .history li, .emptyHistory{
-					border-radius:999px;
-				}
-				.history li{
-					padding: 8px 12px;
-				}
-				</style>`);
+				$("body").addClass('styleThin');
 			}
 			$('.ornament-input-group').removeAttr('style');
 			// 加载LOGO
@@ -558,8 +540,8 @@ require(['jquery'], function ($) {
 				return;
 			}
 			anitInput.unbind('transitionend');
-			$(".input-bg").css("border-color","var(--dark)");
-			anitInput.css("opacity","0");
+			$(".input-bg").css("border-color", "var(--dark)");
+			anitInput.css("opacity", "0");
 		});
 		$('body').append(anitInput);
 		ornamentInput.css('opacity', 0);
@@ -625,7 +607,7 @@ require(['jquery'], function ($) {
 			$(".bookmark").removeClass("animation");
 			// 隐藏搜索页
 			$(".history").removeClass("animation");
-			$(".input-bg").css("border-color","").removeClass("animation");
+			$(".input-bg").css("border-color", "").removeClass("animation");
 			$(".shortcut").removeClass("animation");
 			$(".page-search").removeClass("animation");
 			$(".page-search").on('transitionend', function (evt) {
@@ -922,7 +904,7 @@ require(['jquery'], function ($) {
 					var data = res.data;
 					for (var i = 0, l = data.length; i < l; i++) {
 						if (data[i].name === "今日冷知识") {
-							$('.trivia').attr('href',data[i].link);
+							$('.trivia').attr('href', data[i].link);
 							$('.trivia').find('.shl').text(data[i].value.subtitle);
 						} else if (data[i].name === "热搜榜") {
 							var html = '';
@@ -996,7 +978,7 @@ require(['jquery'], function ($) {
 			location.href = "x:bm?sort=default";
 		}
 	}).longPress(() => {
-		var data = [{ "title": "搜索引擎", "type": "select", "value": "engines", "data": [{ "t": "夸克搜索", "v": "quark" }, { "t": "跟随Via浏览器", "v": "via" }, { "t": "百度搜索", "v": "baidu" }, { "t": "谷歌搜索", "v": "google" }, { "t": "必应搜索", "v": "bing" }, { "t": "神马搜索", "v": "sm" }, { "t": "好搜搜索", "v": "haosou" }, { "t": "搜狗搜索", "v": "sogou" }, { "t": "自定义", "v": "diy" }] }, { "title": "设置壁纸", "value": "wallpaper" }, { "title": "设置LOGO", "value": "logo" }, { "title": "恢复默认壁纸和LOGO", "value": "delLogo" }, { "title": "图标颜色", "type": "select", "value": "bookcolor", "data": [{ "t": "深色图标", "v": "black" }, { "t": "浅色图标", "v": "white" }] }, { "title": "主页样式细圆", "type": "checkbox", "value": "styleThin"}, { "title": "夜间模式", "type": "checkbox", "value": "nightMode" }, { "title": "记录搜索历史", "type": "checkbox", "value": "searchHistory" }, { "type": "hr" }, { "title": "导出主页数据", "value": "export" }, { "title": "导入主页数据", "value": "import" }, { "type": "hr" }, { "title": "Github", "value": "openurl", "description": "https://github.com/liumingye/quarkHomePage" }, { "title": "关于", "description": "当前版本：" + version }];
+		var data = [{ "title": "搜索引擎", "type": "select", "value": "engines", "data": [{ "t": "夸克搜索", "v": "quark" }, { "t": "跟随Via浏览器", "v": "via" }, { "t": "百度搜索", "v": "baidu" }, { "t": "谷歌搜索", "v": "google" }, { "t": "必应搜索", "v": "bing" }, { "t": "神马搜索", "v": "sm" }, { "t": "好搜搜索", "v": "haosou" }, { "t": "搜狗搜索", "v": "sogou" }, { "t": "自定义", "v": "diy" }] }, { "title": "设置壁纸", "value": "wallpaper" }, { "title": "设置LOGO", "value": "logo" }, { "title": "恢复默认壁纸和LOGO", "value": "delLogo" }, { "title": "图标颜色", "type": "select", "value": "bookcolor", "data": [{ "t": "深色图标", "v": "black" }, { "t": "浅色图标", "v": "white" }] }, { "title": "主页样式细圆", "type": "checkbox", "value": "styleThin" }, { "title": "夜间模式", "type": "checkbox", "value": "nightMode" }, { "title": "记录搜索历史", "type": "checkbox", "value": "searchHistory" }, { "type": "hr" }, { "title": "导出主页数据", "value": "export" }, { "title": "导入主页数据", "value": "import" }, { "type": "hr" }, { "title": "Github", "value": "openurl", "description": "https://github.com/liumingye/quarkHomePage" }, { "title": "关于", "description": "当前版本：" + version }];
 		var html = '<div class="page-settings"><div class="set-header"><div class="set-back"></div><p class="set-logo">主页设置</p></div><ul class="set-option-from">';
 		for (var json of data) {
 			if (json.type === 'hr') {
@@ -1137,6 +1119,12 @@ require(['jquery'], function ($) {
 			var dom = $(this),
 				item = dom.parent().data("value"),
 				value = dom.prop("checked");
+			// 应用设置
+			if (item === 'styleThin' && value === true) {
+				$("body").addClass('styleThin');
+			} else {
+				$("body").removeClass('styleThin');
+			}
 			// 保存设置
 			settings.set(item, value);
 		});

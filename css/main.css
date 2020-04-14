@@ -61,6 +61,29 @@ body,html {
 	--dark: #313a46;
 }
 /**
+ * 细圆风格
+*/
+.styleThin .ornament-input-group,.styleThin .anitInput{
+	height: 50px;
+}
+.styleThin .ornament-input-group,.styleThin .anitInput,.styleThin .input-bg{
+	border-width:1px;
+	border-radius:999px;
+}
+.styleThin .search-btn,.styleThin .empty-input{
+	line-height: 48px;
+	height: 48px;
+}
+.styleThin .shortcut3 li:not(:first-child),.styleThin .history li,.styleThin .emptyHistory{
+	border-radius:999px;
+}
+.styleThin .history li{
+	padding: 8px 12px;
+}
+.styleThin .input-bg{
+	margin: 10px 18px;
+}
+/**
  * home页面
 */
 .page-home {
