@@ -71,7 +71,7 @@ require(['jquery'], function ($) {
 		// 应用设置项
 		apply: function () {
 			var that = this;
-			// 输入框样式细圆
+			// 样式细圆
 			if (that.get('styleThin')) {
 				$("body").append(`<style>
 				.ornament-input-group, .anitInput{
@@ -84,6 +84,12 @@ require(['jquery'], function ($) {
 				.search-btn, .empty-input{
 					line-height: 48px;
 					height: 48px;
+				}
+				.shortcut3 li:not(:first-child), .history li, .emptyHistory{
+					border-radius:999px;
+				}
+				.history li{
+					padding: 8px 12px;
 				}
 				</style>`);
 			}
