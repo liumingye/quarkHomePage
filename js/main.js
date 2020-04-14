@@ -1131,9 +1131,9 @@ require(['jquery'], function ($) {
 					this.height = $(document).height();
 				} else if (phase === 'move') {
 					var sliding = Math.max(fingerData[0].end.y - fingerData[0].start.y, 0);
-					$('.logo').attr("disabled", true).css({ 'opacity': 1 - (sliding / this.height) * 4, 'transition': 'none' });
-					$('.ornament-input-group').css({ 'transform': 'translate3d(0,' + Math.min((sliding / this.height) * 100, 30) + 'px,0)', 'transition': 'none' });
-					$('.bookmark').attr("disabled", true).css({ 'opacity': 1 - (sliding / this.height) * 4, 'transform': 'scale(' + (1 - (sliding / this.height) * .3) + ')', 'transition': 'none' });
+					$('.logo').attr("disabled", true).css({ 'opacity': 1 - (sliding / this.height) * 4, 'transition-duration': '0ms' });
+					$('.ornament-input-group').css({ 'transform': 'translate3d(0,' + Math.min((sliding / this.height) * 100, 30) + 'px,0)', 'transition-duration': '0ms' });
+					$('.bookmark').attr("disabled", true).css({ 'opacity': 1 - (sliding / this.height) * 4, 'transform': 'scale(' + (1 - (sliding / this.height) * .3) + ')', 'transition-duration': '0ms' });
 				} else if (phase === 'end' || phase === 'cancel') {
 					$('.logo').removeAttr("disabled style");
 					$('.bookmark').removeAttr("disabled style");
