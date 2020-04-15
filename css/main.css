@@ -400,7 +400,7 @@ body,html {
 	background-color: transparent;
 	caret-color: #2196F3;
 	color: var(--dark);
-	animation: down .4s;
+	animation: down .35s;
 	width: 0;
 	line-height: 1;
 }
@@ -416,7 +416,7 @@ body,html {
     line-height: 46px;
     height: 46px;
 	font-weight: bold;
-	animation: down .4s;
+	animation: down .35s;
 }
 .shortcut{
 	padding:0 10px;background:#efefef;line-height:25px;

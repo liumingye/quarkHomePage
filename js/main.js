@@ -232,6 +232,7 @@ require(['jquery'], function ($) {
 			this.$ele.longPress(function () {
 				if (that.status !== "editing" && data.length > 0) {
 					that.status = "editing";
+					$('.logo,.ornament-input-group').css('pointer-events', 'none');
 					$('.addbook').remove();
 					require(['jquery-sortable'], function () {
 						that.$ele.sortable({
@@ -255,6 +256,7 @@ require(['jquery'], function ($) {
 					})
 					$(document).click(function () {
 						$(document).unbind("click");
+						$('.logo,.ornament-input-group').css('pointer-events', '');
 						$(".delbook").addClass("animation");
 						$(".delbook").on('transitionend', function (evt) {
 							if (evt.target !== this) {
