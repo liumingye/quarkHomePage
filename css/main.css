@@ -154,9 +154,9 @@ body,html {
 	padding: 7px 0 10px;
 }
 .delbook{
-	top: -4px;
-	right: -4px;
-	position:absolute;width:20px;height:20px;background:url(../img/delete.png) no-repeat center;background-size:20px;
+	top: -5px;
+	right: -5px;
+	position:absolute;width:18px;height:18px;background:url(../img/delete.png) no-repeat center;background-size:18px;
 	animation:scale .3s;
 	transition: transform .3s;
 }
@@ -400,8 +400,9 @@ body,html {
 	background-color: transparent;
 	caret-color: #2196F3;
 	color: var(--dark);
-	animation: down .3s;
+	animation: down .4s;
 	width: 0;
+	line-height: 1;
 }
 .search-input::-webkit-input-placeholder{
 	color: #969696;
@@ -415,7 +416,7 @@ body,html {
     line-height: 46px;
     height: 46px;
 	font-weight: bold;
-	animation: down .3s;
+	animation: down .4s;
 }
 .shortcut{
 	padding:0 10px;background:#efefef;line-height:25px;

@@ -8,7 +8,7 @@
 	<title>主页</title>
 	<link rel="stylesheet" type="text/css" href="css/main.css?v=1.49.158689" />
 	<link rel="stylesheet" id="nightCss" type="text/css" href="css/night.css?v=1.49.158689" disabled />
-</script>
+</head>
 
 <body>
 	<div id="app">
@@ -53,10 +53,133 @@
 		</div>
 		<input type="text" class="s-temp" />
 	</div>
-	<script src="js/lib/require.js?v=1.49.158689"></script>
-	<script src="js/main.js?v=1.49.158689"></script>
-	<!-- 不重要的CSS最后加载 -->
-	<link rel="stylesheet" type="text/css" href="css/lazy.css?v=1.49.158689" />
+	<script>
+		if (navigator.serviceWorker) {
+			navigator.serviceWorker.register('sw.js');
+		}
+		// 静态文件缓存
+		var app = window.app || {};
+		app.version = "1.49.158693";
+		app.res = {
+			getContent: function (url, complete, error) {
+				if (location.protocol === "file:") {
+					error();
+					return;
+				}
+				var xhr = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();
+				if (xhr) {
+					xhr.withCredentials = false;
+					xhr.open("GET", url, false);
+					xhr.onreadystatechange = function () {
+						if (xhr.readyState == 4 && xhr.status == 200) {
+							complete(xhr.response || xhr.responseText);
+						}
+					};
+					xhr.onerror = function () {
+						error();
+					};
+					xhr.ontimeout = function () {
+						error();
+					};
+					xhr.send();
+				} else {
+					error();
+				}
+			},
+			loadJs: function (name, url, version, callback) {
+				var This = this;
+				name = "js." + name;
+				url += "?v=" + version;
+				if (window.localStorage) {
+					var js = localStorage.getItem(name);
+					if (!js || js.length == 0 || version != localStorage.getItem(name + ".v")) {
+						console.log("download " + name);
+						This.getContent(
+							url,
+							function (res) {
+								localStorage.setItem(name, JSON.stringify(res));
+								localStorage.setItem(name + ".v", version);
+								res = res == null ? "" : res;
+								This.writeJs(res);
+								callback && callback();
+							},
+							function () {
+								This.linkJs(url);
+								callback && callback();
+							}
+						);
+					} else {
+						console.log("cache " + name);
+						This.writeJs(JSON.parse(js));
+						callback && callback();
+					}
+				} else {
+					console.log("link " + name);
+					This.linkJs(url, callback);
+				}
+			},
+			loadCss: function (name, url, version) {
+				var This = this;
+				name = "css." + name;
+				url += "?v=" + version;
+				if (window.localStorage) {
+					var css = localStorage.getItem(name);
+					if (!css || css.length == 0 || version != localStorage.getItem(name + ".v")) {
+						console.log("download " + name);
+						This.getContent(
+							url,
+							function (res) {
+								localStorage.setItem(name, JSON.stringify(res));
+								localStorage.setItem(name + ".v", version);
+								res = res == null ? "" : res;
+								This.writeCss(res);
+							},
+							function () {
+								This.linkCss(url);
+							}
+						);
+					} else {
+						console.log("cache " + name);
+						This.writeCss(JSON.parse(css));
+					}
+				} else {
+					console.log("link " + name);
+					This.linkCss(url);
+				}
+			},
+			writeJs: function (text) {
+				var link = document.createElement("script");
+				link.innerHTML = text;
+				document.getElementsByTagName("head").item(0).appendChild(link);
+			},
+			linkJs: function (url, callback) {
+				var link = document.createElement("script");
+				link.src = url;
+				document.getElementsByTagName("head").item(0).appendChild(link);
+				link.onload = link.onreadystatechange = function () {
+					if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete") {
+						callback && callback();
+					}
+				};
+			},
+			writeCss: function (text) {
+				var link = document.createElement("style");
+				link.type = "text/css";
+				link.innerHTML = text;
+				document.getElementsByTagName("head").item(0).appendChild(link);
+			},
+			linkCss: function (url) {
+				var link = document.createElement("link");
+				link.type = "text/css";
+				link.rel = "stylesheet";
+				link.href = url;
+				document.getElementsByTagName("head").item(0).appendChild(link);
+			}
+		};
+		app.res.loadCss("lazy", "css/lazy.css", app.version);
+		app.res.loadJs("require", "js/lib/require.js", "2.3.6");
+		app.res.loadJs("main", "js/main.js", app.version);
+	</script>
 </body>
 
 </html>
