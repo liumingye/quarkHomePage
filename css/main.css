@@ -83,8 +83,9 @@ body,html {
 .styleThin .input-bg{
 	margin: 10px 18px;
 }
-.styleThin .history .content{
-	margin-bottom: 0;
+.styleThin .suggestion, .styleThin .history{
+	bottom: 114px;
+	max-height: calc(100% - 114px);
 }
 /**
  * home页面
@@ -296,8 +297,8 @@ body,html {
 	overflow: visible;
 }
 .suggestion, .history{overflow:auto;width:100%;
-	max-height: calc(100% - 124px);
-	bottom: 124px;
+	max-height: calc(100% - 122px);
+	bottom: 122px;
 	position: absolute;
 }
 .history{
@@ -355,8 +356,8 @@ body,html {
 .suggestion li{
 	padding-left:50px;background:url(../img/su.png) no-repeat center;background-size:15px;background-position-x:20px;
 	display: flex;
-	line-height: 44px;
-	height: 44px;
+	line-height: 52px;
+	height: 52px;
 	color:#444;
 	font-size: 14px;
 }
