@@ -1,4 +1,4 @@
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js');
+importScripts('https://g.alicdn.com/kg/workbox/4.3.1/workbox-sw.js');
 // 缓存静态资源
 workbox.routing.registerRoute(/([\/|.|\w|\s|-])*\.(?:png|gif|jpg|jpeg|webp|svg|ico|ttf|woff|woff2|eot|otf|js|css)/, new workbox.strategies.CacheFirst({
     cacheName: 'static-resources',
