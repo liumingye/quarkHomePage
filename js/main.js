@@ -683,7 +683,7 @@ require(['jquery'], function ($) {
 				url: "https://quark.sm.cn/api/qs",
 				type: "GET",
 				dataType: "jsonp",
-				data: { query: wd },
+				data: { query: wd , ve: '4.1.0.132'},
 				timeout: 5000,
 				success: function (res) {
 					if ($(that).val() !== wd) {
