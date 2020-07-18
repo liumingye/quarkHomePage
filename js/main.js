@@ -880,7 +880,7 @@ require(['jquery'], function ($) {
 
 			// 天气
 			$.ajax({
-				url: "https://ai.sm.cn/quark/1/api?format=json&method=weather&callback=weather",
+				url: "https://jsonp.afeld.me/?callback=weather&url=https%3A%2F%2Fai.sm.cn%2Fquark%2F1%2Fapi%3Fformat%3Djson%26method%3Dweather",
 				type: "get",
 				dataType: "jsonp",
 				success: function (res) {
@@ -898,7 +898,7 @@ require(['jquery'], function ($) {
 
 			// 热搜榜 | 今日高分影荐 | 知乎热榜
 			$.ajax({
-				url: "https://ai.sm.cn/quark/1/api?format=json&method=newchosen",
+				url: "https://jsonp.afeld.me/?url=https%3A%2F%2Fai.sm.cn%2Fquark%2F1%2Fapi%3Fformat%3Djson%26method%3Dnewchosen",
 				type: "get",
 				dataType: "jsonp",
 				success: function (res) {
