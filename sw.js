@@ -10,6 +10,6 @@ workbox.routing.registerRoute(/([\/|.|\w|\s|-])*\.(?:png|gif|jpg|jpeg|webp|svg|i
 }));
 // 缓存主页
 workbox.precaching.precacheAndRoute([{
-    "revision": "15956",
+    "revision": "15957",
     "url": "index.html"
 }], {});

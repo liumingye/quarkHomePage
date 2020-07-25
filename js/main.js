@@ -639,7 +639,7 @@ require(['jquery'], function ($) {
 			searchText(evt.target.innerText);
 		}
 	});
-
+	var qs_ajax = null;
 	$(".search-input").on("input propertychange", function () {
 		var that = this;
 		var wd = $(that).val();
@@ -680,12 +680,13 @@ require(['jquery'], function ($) {
 					$(".suggestion").show().html(html).scrollTop($(".suggestion")[0].scrollHeight);
 				}
 			});
+			if(qs_ajax){
+				qs_ajax.abort();
+			}
 			if(has_char >= 0){
-				$.ajax({
+				qs_ajax = $.ajax({
 					url: "https://tool.liumingye.cn/jsonp/?url="+encodeURIComponent("https://quark.sm.cn/api/qs?query="+wd+"&ve=4.1.0.132"),
 					type: "GET",
-					dataType: "jsonp",
-					jsonpCallback: 'qs',
 					timeout: 5000,
 					success: function (res) {
 						if ($(that).val() !== wd) {
