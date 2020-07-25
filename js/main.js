@@ -682,7 +682,7 @@ require(['jquery'], function ($) {
 			});
 			if(has_char >= 0){
 				$.ajax({
-					url: "http://tool.liumingye.cn/jsonp/?url="+encodeURIComponent("https://quark.sm.cn/api/qs?query="+wd+"&ve=4.1.0.132"),
+					url: "https://tool.liumingye.cn/jsonp/?url="+encodeURIComponent("https://quark.sm.cn/api/qs?query="+wd+"&ve=4.1.0.132"),
 					type: "GET",
 					dataType: "jsonp",
 					jsonpCallback: 'qs',
