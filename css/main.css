@@ -82,6 +82,8 @@ body,html {
 }
 .styleThin .input-bg{
 	margin: 10px 18px;
+	line-height: 49px;
+    height: 49px;
 }
 .styleThin .suggestion, .styleThin .history{
 	bottom: 114px;
@@ -380,6 +382,8 @@ body,html {
 }
 .s-temp{position:fixed;top:-8pc;}
 .input-bg{
+	line-height: 50px;
+    height: 50px;
 	display: flex;
 	overflow: visible;
 	font-size:14px;
@@ -389,7 +393,6 @@ body,html {
 	transition: opacity .3s;
 	will-change: opacity;
 	border: 2px solid transparent;
-	height: 50px;
 }
 .input-bg.animation{
 	opacity: 1;

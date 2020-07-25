@@ -4,12 +4,12 @@ workbox.routing.registerRoute(/([\/|.|\w|\s|-])*\.(?:png|gif|jpg|jpeg|webp|svg|i
     cacheName: 'static-resources',
     plugins: [new workbox.expiration.Plugin({
         maxEntries: 500, // 最大保存项目
-        maxAgeSeconds: 7 * 24 * 60 * 60, // 缓存 7 天
+        maxAgeSeconds: 1 * 24 * 60 * 60, // 缓存 1 天
         purgeOnQuotaError: true
     })]
 }));
 // 缓存主页
 workbox.precaching.precacheAndRoute([{
-    "revision": "15957",
+    "revision": "15958",
     "url": "index.html"
 }], {});
