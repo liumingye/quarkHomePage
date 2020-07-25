@@ -654,7 +654,8 @@ require(['jquery'], function ($) {
 			$(".history").hide();
 			$(".empty-input").show();
 			$(".search-btn").html(/^\b(((https?|ftp):\/\/)?[-a-z0-9]+(\.[-a-z0-9]+)*\.(?:com|net|org|int|edu|gov|mil|arpa|asia|biz|info|name|pro|coop|aero|museum|[a-z][a-z]|((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]\d)|\d))\b(\/[-a-z0-9_:\@&?=+,.!\/~%\$]*)?)$/i.test(wd) ? "进入" : "搜索");
-			escape(wd).indexOf("%u") < 0 ? $(".shortcut2").show() : $(".shortcut3").show();
+			var has_char = escape(wd).indexOf("%u");
+			has_char < 0 ? $(".shortcut2").show() : $(".shortcut3").show();
 			$.ajax({
 				url: "https://suggestion.baidu.com/su",
 				type: "GET",
@@ -679,24 +680,26 @@ require(['jquery'], function ($) {
 					$(".suggestion").show().html(html).scrollTop($(".suggestion")[0].scrollHeight);
 				}
 			});
-			$.ajax({
-				url: "https://quark.sm.cn/api/qs",
-				type: "GET",
-				dataType: "jsonp",
-				data: { query: wd , ve: '4.1.0.132'},
-				timeout: 5000,
-				success: function (res) {
-					if ($(that).val() !== wd) {
-						return;
+			if(has_char >= 0){
+				$.ajax({
+					url: "http://tool.liumingye.cn/jsonp/?url="+encodeURIComponent("https://quark.sm.cn/api/qs?query="+wd+"&ve=4.1.0.132"),
+					type: "GET",
+					dataType: "jsonp",
+					jsonpCallback: 'qs',
+					timeout: 5000,
+					success: function (res) {
+						if ($(that).val() !== wd) {
+							return;
+						}
+						var data = res.data;
+						var html = '<li>快搜:</li>';
+						for (var i = 0, l = data.length; i < l; i++) {
+							html += '<li>' + data[i] + '</li>';
+						}
+						$('.shortcut3').html(html);
 					}
-					var data = res.data;
-					var html = '<li>快搜:</li>';
-					for (var i = 0, l = data.length; i < l; i++) {
-						html += '<li>' + data[i] + '</li>';
-					}
-					$('.shortcut3').html(html);
-				}
-			});
+				});
+			}
 		}
 	});
 
