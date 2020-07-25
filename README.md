@@ -1,4 +1,4 @@
-![](https://img.shields.io/badge/license-MIT-green)  ![](https://img.shields.io/badge/version-1.49-red)
+![](https://img.shields.io/badge/license-MIT-green)  ![](https://img.shields.io/badge/version-1.50-red)
 
 ## quarkHomePage
 H5仿夸克浏览器主页
