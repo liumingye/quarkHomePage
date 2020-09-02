@@ -313,7 +313,14 @@ require(['jquery'], function ($) {
 						$("#addbook-upload").click(function () {
 							openFile(function () {
 								var file = this.files[0];
-								$("#addbook-upload").html('上传图标中...').css("pointer-events", "none");
+								var reader = new FileReader();
+								reader.onload = function () {
+									$("#addbook-upload").html('<img src="' + this.result + '"></img><p>' + file.name + '</p>');
+								};
+								$("#addbook-upload").css("pointer-events", "");
+								$(".addbook-ok").css("pointer-events", "");
+								reader.readAsDataURL(file);
+								/*$("#addbook-upload").html('上传图标中...').css("pointer-events", "none");
 								$(".addbook-ok").css("pointer-events", "none");
 								uploadFile(file, {
 									success: function (url) {
@@ -326,7 +333,7 @@ require(['jquery'], function ($) {
 										$("#addbook-upload").css("pointer-events", "");
 										$(".addbook-ok").css("pointer-events", "");
 									}
-								})
+								})*/
 							});
 						});
 						$(".addbook-ok").click(function () {
@@ -680,12 +687,12 @@ require(['jquery'], function ($) {
 					$(".suggestion").show().html(html).scrollTop($(".suggestion")[0].scrollHeight);
 				}
 			});
-			if(qs_ajax){
+			if (qs_ajax) {
 				qs_ajax.abort();
 			}
-			if(has_char >= 0){
+			if (has_char >= 0) {
 				qs_ajax = $.ajax({
-					url: "https://tool.liumingye.cn/jsonp/?url="+encodeURIComponent("https://quark.sm.cn/api/qs?query="+wd+"&ve=4.1.0.132"),
+					url: "https://tool.liumingye.cn/jsonp/?url=" + encodeURIComponent("https://quark.sm.cn/api/qs?query=" + wd + "&ve=4.1.0.132"),
 					type: "GET",
 					timeout: 5000,
 					success: function (res) {
