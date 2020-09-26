@@ -690,9 +690,9 @@ require(['jquery'], function ($) {
 			if (qs_ajax) {
 				qs_ajax.abort();
 			}
-			if (has_char >= 0) {
+			/*if (has_char >= 0) {
 				qs_ajax = $.ajax({
-					url: "https://tool.liumingye.cn/jsonp/?url=" + encodeURIComponent("https://quark.sm.cn/api/qs?query=" + wd + "&ve=4.1.0.132"),
+					url: "https://quark.sm.cn/api/qs?query=" + wd + "&ve=4.1.0.132",
 					type: "GET",
 					timeout: 5000,
 					success: function (res) {
@@ -707,7 +707,7 @@ require(['jquery'], function ($) {
 						$('.shortcut3').html(html);
 					}
 				});
-			}
+			}*/
 		}
 	});
 
