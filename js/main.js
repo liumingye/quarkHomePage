@@ -690,9 +690,9 @@ require(['jquery'], function ($) {
 			if (qs_ajax) {
 				qs_ajax.abort();
 			}
-			/*if (has_char >= 0) {
+			if (has_char >= 0) {
 				qs_ajax = $.ajax({
-					url: "https://quark.sm.cn/api/qs?query=" + wd + "&ve=4.1.0.132",
+					url: "https://bird.ioliu.cn/v1?url=https://quark.sm.cn/api/qs?query=" + wd + "&ve=4.1.0.132",
 					type: "GET",
 					timeout: 5000,
 					success: function (res) {
@@ -707,7 +707,7 @@ require(['jquery'], function ($) {
 						$('.shortcut3').html(html);
 					}
 				});
-			}*/
+			}
 		}
 	});
 
@@ -891,9 +891,9 @@ require(['jquery'], function ($) {
 
 			// 天气
 			$.ajax({
-				url: "https://jsonp.afeld.me/?callback=weather&url=https%3A%2F%2Fai.sm.cn%2Fquark%2F1%2Fapi%3Fformat%3Djson%26method%3Dweather",
+				url: "https://bird.ioliu.cn/v2?url=https://ai.sm.cn/quark/1/api?format=json&method=weather",
 				type: "get",
-				dataType: "jsonp",
+				dataType: "json",
 				success: function (res) {
 					var data = res.data;
 					var color1 = data.color1;
@@ -909,9 +909,9 @@ require(['jquery'], function ($) {
 
 			// 热搜榜 | 今日高分影荐 | 知乎热榜
 			$.ajax({
-				url: "https://jsonp.afeld.me/?url=https%3A%2F%2Fai.sm.cn%2Fquark%2F1%2Fapi%3Fformat%3Djson%26method%3Dnewchosen",
+				url: "https://bird.ioliu.cn/v2?url=https://ai.sm.cn/quark/1/api?format=json&method=newchosen",
 				type: "get",
-				dataType: "jsonp",
+				dataType: "json",
 				success: function (res) {
 					var data = res.data;
 					for (var i = 0, l = data.length; i < l; i++) {
@@ -967,9 +967,9 @@ require(['jquery'], function ($) {
 
 			// 今日份壁纸
 			$.ajax({
-				url: "https://jsonp.afeld.me/?callback=&url=https%3A%2F%2Fcn.bing.com%2FHPImageArchive.aspx%3Fformat%3Djs%26cc%3Djp%26idx%3D0%26n%3D1",
+				url: "https://bird.ioliu.cn/v2?url=https://cn.bing.com/HPImageArchive.aspx?format=js&cc=jp&idx=0&n=1",
 				type: "get",
-				dataType: "jsonp",
+				dataType: "json",
 				success: function (res) {
 					var url = 'https://www.bing.com' + res.images[0].url.replace('1920x1080', '1080x1920');
 					$('.back-img').css('background-image', 'url(' + url + ')')
